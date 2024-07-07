@@ -7,7 +7,15 @@ with open(fname) as f:
     text_input = f.read()
 
 lexer = Lexer().get_lexer()
-tokens = lexer.lex(text_input)
+
+try:
+    tokens = list(lexer.lex(text_input))
+    for token in tokens:
+        print(f"Token: {token.gettokentype()}, Valor: {token.getstr()}, Posición: {token.getsourcepos().lineno}:{token.getsourcepos().colno}")
+except Exception as e:
+    print(f"Error al procesar el archivo de entrada: {e}")
+    print(f"Texto hasta el error: {text_input[:60]}")
+    raise
 
 codegen = CodeGen()
 
@@ -18,7 +26,12 @@ printf = codegen.printf
 pg = Parser(module, builder, printf)
 pg.parse()
 parser = pg.get_parser()
-parser.parse(tokens).eval()
+parsed_program = parser.parse(iter(tokens))
+
+for stmt in parsed_program:
+    print(f"Evaluando: {stmt}")
+    stmt.eval()
+    print(f"Evaluado: {stmt}")
 
 codegen.create_ir()
 codegen.save_ir("output.ll")

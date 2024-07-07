@@ -21,13 +21,13 @@ class CodeGen():
     def _create_execution_engine(self):
         target = self.binding.Target.from_default_triple()
         target_machine = target.create_target_machine()
-        backing_mod = binding.parse_assembly("")
-        engine = binding.create_mcjit_compiler(backing_mod, target_machine)
+        backing_mod = self.binding.parse_assembly("")
+        engine = self.binding.create_mcjit_compiler(backing_mod, target_machine)
         self.engine = engine
 
     def _declare_print_function(self):
         voidptr_ty = ir.IntType(8).as_pointer()
-        printf_ty = ir.FunctionType(ir.IntType(32), [voidptr_ty, ir.IntType(32)], var_arg=True)
+        printf_ty = ir.FunctionType(ir.IntType(32), [voidptr_ty], var_arg=True)
         printf = ir.Function(self.module, printf_ty, name="printf")
         self.printf = printf
 
