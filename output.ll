@@ -24,7 +24,7 @@ loop.if:
   store i32 %".10", i32* %".8"
   %".12" = load i32, i32* @"x"
   %".13" = srem i32 %".12", 2
-  %".14" = icmp eq i32 %".13", 0
+  %".14" = icmp ne i32 %".13", 0
   br i1 %".14", label %"then", label %"endif"
 loop.endif:
   br label %"afterloop"

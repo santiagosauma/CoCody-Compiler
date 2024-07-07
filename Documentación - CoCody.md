@@ -40,8 +40,7 @@ CoCody reconoce los siguientes tokens:
 
 ### Gramática
 
-La gramática de CoCody se define con las siguientes reglas de producción:
-
+```yaml
 program : INSTRUCCION_LIST
 
 INSTRUCCION_LIST : INSTRUCCION INSTRUCCION_LIST
@@ -80,3 +79,117 @@ CONDICION : EXPRESION EQ EXPRESION
           | EXPRESION LT EXPRESION
           | EXPRESION GTE EXPRESION
           | EXPRESION LTE EXPRESION
+```
+
+## Funciones
+
+### Asignación
+
+Asignar un valor a una variable:
+```
+variable <- valor FIN
+```
+Ejemplo:
+```
+x <- 10 FIN 
+```
+
+### Impresión
+Imprimir el valor de una variable o una expresión:
+```
+muestra(valor o expresión) FIN
+```
+Ejemplo:
+```
+muestra(x) FIN
+```
+
+### Operaciones Aritméticas
+Realizar operaciones entre números o variables:
+```
+resultado <- expresión_aritmética FIN
+```
+
+Ejemplos:
+
+```
+y <- x + 5 FIN
+z <- y * 2 FIN
+```
+
+### Condicionales
+Estructura if para evaluar una condición:
+
+```
+si (condición) ENTONCES
+  instrucciones
+FIN_SI
+```
+
+Ejemplo:
+```
+si (x == 10) ENTONCES
+  muestra(x) FIN
+FIN_SI
+```
+### Ciclo While
+Ciclo while para ejecutar instrucciones mientras se cumpla una condición:
+
+```
+mientras (condición) HACER
+  instrucciones
+FIN_MIENTRAS
+```
+
+Ejemplo:
+```
+mientras (x < 10) HACER
+  x <- x + 1 FIN
+  muestra(x) FIN
+FIN_MIENTRAS
+```
+
+## Ejemplos de funcionamiento
+
+### Ejemplo 1: Asignación e Impresión
+```
+x <- 10 FIN
+muestra(x) FIN
+```
+
+### Ejemplo 2: Operaciones Aritméticas
+```
+x <- 5 FIN
+y <- x + 3 FIN
+z <- y * 2 FIN
+muestra(z) FIN
+```
+
+### Ejemplo 3: Condicional Simple
+```
+x <- 10 FIN
+si (x == 10) ENTONCES
+  muestra(x) FIN
+FIN_SI
+```
+
+### Ejemplo 4: Ciclo While
+```
+x <- 0 FIN
+mientras (x < 5) HACER
+  x <- x + 1 FIN
+  muestra(x) FIN
+FIN_MIENTRAS
+```
+
+### Ejemplo 5: Combinación Completa
+```
+x <- 0 FIN
+mientras (x < 10) HACER
+  x <- x + 1 FIN
+  si (x % 2 == 0) ENTONCES
+    muestra(x) FIN
+  FIN_SI
+FIN_MIENTRAS
+muestra("Fin del ciclo") FIN
+```

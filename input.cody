@@ -1,7 +1,7 @@
 x <- 0 FIN
 mientras (x < 10) HACER
   x <- x + 1 FIN
-  si (x % 2 == 0) ENTONCES
+  si (x % 2 != 0) ENTONCES
     muestra(x) FIN
   FIN_SI
 FIN_MIENTRAS
