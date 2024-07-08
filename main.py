@@ -17,8 +17,8 @@ def main():
     tokens = list(lexer.lex(text_input))
 
     # Imprimir los tokens generados para depuración
-    for token in tokens:
-        print(f"Token: {token.gettokentype()}, Valor: {token.getstr()}, Posición: {token.getsourcepos().lineno}:{token.getsourcepos().colno}")
+    # for token in tokens:
+    #     print(f"Token: {token.gettokentype()}, Valor: {token.getstr()}, Posición: {token.getsourcepos().lineno}:{token.getsourcepos().colno}")
 
     codegen = CodeGen()
     module = codegen.module

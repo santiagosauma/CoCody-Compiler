@@ -1,8 +1,13 @@
-func suma(a, b)
-  retorna a + b FIN
-FIN
+a <- 0 FIN
+b <- 10 FIN
 
-x <- 2 FIN
-y <- 3 FIN
-resultado <- suma(x, y) FIN
-muestra(resultado) FIN
+desde i <- 0 hasta 10 incremento 1 HACER
+    muestra(a) FIN
+    a <- a + 1 FIN
+FIN_DESDE
+
+muestra(a) FIN
+
+si (a == 10) ENTONCES
+    muestra("El valor de a es 10") FIN
+FIN_SI
