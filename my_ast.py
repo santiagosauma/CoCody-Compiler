@@ -10,20 +10,26 @@ class Number():
         return ir.Constant(ir.IntType(32), int(self.value))
 
 class Identifier():
-    def __init__(self, builder, module, name):
+    def __init__(self, builder, module, name, local_vars):
         self.builder = builder
         self.module = module
         self.name = name
+        self.local_vars = local_vars
 
     def eval(self):
-        return self.builder.load(self.module.globals[self.name])
+        if self.name in self.local_vars:
+            return self.builder.load(self.local_vars[self.name])
+        if self.name in self.module.globals:
+            return self.builder.load(self.module.globals[self.name])
+        raise KeyError(f'Variable {self.name} no encontrada.')
 
 class BinaryOp():
-    def __init__(self, builder, module, left, right):
+    def __init__(self, builder, module, left, right, local_vars):
         self.builder = builder
         self.module = module
         self.left = left
         self.right = right
+        self.local_vars = local_vars
 
 class Sum(BinaryOp):
     def eval(self):
@@ -73,11 +79,12 @@ class String():
 global_string_counter = 0  # Contador global para generar nombres únicos
 
 class Print():
-    def __init__(self, builder, module, printf, value):
+    def __init__(self, builder, module, printf, value, local_vars=None):
         self.builder = builder
         self.module = module
         self.printf = printf
         self.value = value
+        self.local_vars = local_vars if local_vars is not None else {}
 
     def eval(self):
         global global_string_counter
@@ -101,26 +108,31 @@ class Print():
         self.builder.call(self.printf, [fmt_arg, value])
 
 class Assign():
-    def __init__(self, builder, module, name, value):
+    def __init__(self, builder, module, name, value, local_vars=None):
         self.builder = builder
         self.module = module
         self.name = name
         self.value = value
+        self.local_vars = local_vars if local_vars is not None else {}
 
     def eval(self):
-        if self.name not in self.module.globals:
-            var = ir.GlobalVariable(self.module, ir.IntType(32), self.name)
-            var.initializer = ir.Constant(ir.IntType(32), 0)
-        var_ptr = self.builder.gep(self.module.globals[self.name], [ir.Constant(ir.IntType(32), 0)])
+        if self.name in self.local_vars:
+            var_ptr = self.local_vars[self.name]
+        else:
+            if self.name not in self.module.globals:
+                var = ir.GlobalVariable(self.module, ir.IntType(32), self.name)
+                var.initializer = ir.Constant(ir.IntType(32), 0)
+            var_ptr = self.builder.gep(self.module.globals[self.name], [ir.Constant(ir.IntType(32), 0)])
         self.builder.store(self.value.eval(), var_ptr)
 
 class Condition():
-    def __init__(self, builder, module, left, right, operator):
+    def __init__(self, builder, module, left, right, operator, local_vars=None):
         self.builder = builder
         self.module = module
         self.left = left
         self.right = right
         self.operator = operator
+        self.local_vars = local_vars if local_vars is not None else {}
 
     def eval(self):
         if self.operator == 'EQ':
@@ -137,12 +149,13 @@ class Condition():
             return self.builder.icmp_signed('<=', self.left.eval(), self.right.eval())
 
 class If():
-    def __init__(self, builder, module, printf, condition, body):
+    def __init__(self, builder, module, printf, condition, body, local_vars=None):
         self.builder = builder
         self.module = module
         self.printf = printf
         self.condition = condition
         self.body = body
+        self.local_vars = local_vars if local_vars is not None else {}
 
     def eval(self):
         cond = self.condition.eval()
@@ -153,18 +166,20 @@ class If():
         
         self.builder.position_at_end(then_block)
         for stmt in self.body:
+            stmt.local_vars = self.local_vars
             stmt.eval()
         self.builder.branch(endif_block)
         
         self.builder.position_at_end(endif_block)
 
 class While():
-    def __init__(self, builder, module, printf, condition, body):
+    def __init__(self, builder, module, printf, condition, body, local_vars=None):
         self.builder = builder
         self.module = module
         self.printf = printf
         self.condition = condition
         self.body = body
+        self.local_vars = local_vars if local_vars is not None else {}
 
     def eval(self):
         loop_block = self.builder.append_basic_block('loop')
@@ -176,8 +191,60 @@ class While():
         cond = self.condition.eval()
         with self.builder.if_then(cond):
             for stmt in self.body:
+                stmt.local_vars = self.local_vars
                 stmt.eval()
             self.builder.branch(loop_block)
         
         self.builder.branch(after_loop_block)
         self.builder.position_at_end(after_loop_block)
+
+class FuncDef():
+    def __init__(self, builder, module, name, params, body):
+        self.builder = builder
+        self.module = module
+        self.name = name
+        self.params = params
+        self.body = body
+
+    def eval(self):
+        func_type = ir.FunctionType(ir.IntType(32), [ir.IntType(32) for _ in self.params])
+        func = ir.Function(self.module, func_type, name=self.name)
+        block = func.append_basic_block(name="entry")
+        self.builder.position_at_end(block)
+
+        local_vars = {}
+        for i, arg in enumerate(func.args):
+            arg.name = self.params[i]
+            var_ptr = self.builder.alloca(ir.IntType(32), name=arg.name)
+            self.builder.store(arg, var_ptr)
+            local_vars[arg.name] = var_ptr
+
+        for stmt in self.body:
+            stmt.local_vars = local_vars
+            stmt.eval()
+
+        self.builder.ret(ir.Constant(ir.IntType(32), 0))
+
+class FuncCall():
+    def __init__(self, builder, module, name, args, local_vars=None):
+        self.builder = builder
+        self.module = module
+        self.name = name
+        self.args = args
+        self.local_vars = local_vars if local_vars is not None else {}
+
+    def eval(self):
+        func = self.module.globals[self.name]
+        args = [arg.eval() for arg in self.args]
+        return self.builder.call(func, args)
+
+class Return():
+    def __init__(self, builder, module, value, local_vars=None):
+        self.builder = builder
+        self.module = module
+        self.value = value
+        self.local_vars = local_vars if local_vars is not None else {}
+
+    def eval(self):
+        ret_val = self.value.eval()
+        self.builder.ret(ret_val)

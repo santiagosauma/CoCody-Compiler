@@ -1,4 +1,8 @@
+func suma(a, b)
+  retorna a + b FIN
+FIN
+
 x <- 2 FIN
 y <- 3 FIN
-resultado <- x ** y FIN
+resultado <- suma(x, y) FIN
 muestra(resultado) FIN
