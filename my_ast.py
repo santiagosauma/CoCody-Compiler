@@ -60,7 +60,7 @@ class String():
         global_string.initializer = string_constant
         return self.builder.bitcast(global_string, ir.IntType(8).as_pointer())
 
-global_string_counter = 0  # Contador global para generar nombres únicos
+global_string_counter = 0
 
 class Print():
     def __init__(self, builder, module, printf, value):

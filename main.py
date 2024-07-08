@@ -1,48 +1,48 @@
+import sys
 from lexer import Lexer
 from my_parser import Parser
 from codegen import CodeGen
 
-fname = "input.cody"
-with open(fname) as f:
-    text_input = f.read()
+def main():
+    if len(sys.argv) != 2:
+        print("Uso: python main.py <archivo.cody>")
+        sys.exit(1)
 
-lexer = Lexer().get_lexer()
+    archivo_input = sys.argv[1]
 
-try:
+    with open(archivo_input, 'r') as f:
+        text_input = f.read()
+
+    lexer = Lexer().get_lexer()
     tokens = list(lexer.lex(text_input))
-    for token in tokens:
-        print(f"Token: {token.gettokentype()}, Valor: {token.getstr()}, Posición: {token.getsourcepos().lineno}:{token.getsourcepos().colno}")
-except Exception as e:
-    print(f"Error al procesar el archivo de entrada: {e}")
-    print(f"Texto hasta el error: {text_input[:60]}")
-    raise
 
-codegen = CodeGen()
+    # Imprimir los tokens generados para depuración
+    # for token in tokens:
+    #     print(f"Token: {token.gettokentype()}, Valor: {token.getstr()}, Posición: {token.getsourcepos().lineno}:{token.getsourcepos().colno}")
 
-module = codegen.module
-builder = codegen.builder
-printf = codegen.printf
+    codegen = CodeGen()
+    module = codegen.module
+    builder = codegen.builder
+    printf = codegen.printf
 
-pg = Parser(module, builder, printf)
-pg.parse()
-parser = pg.get_parser()
-parsed_program = parser.parse(iter(tokens))
+    pg = Parser(module, builder, printf)
+    pg.parse()
+    parser = pg.get_parser()
+    parsed_program = parser.parse(iter(tokens))
 
-for stmt in parsed_program:
-    print(f"Evaluando: {stmt}")
-    stmt.eval()
-    print(f"Evaluado: {stmt}")
+    for stmt in parsed_program:
+        stmt.eval()
 
-codegen.create_ir()
-codegen.save_ir("output.ll")
+    codegen.create_ir()
+    codegen.save_ir("output.ll")
 
-import os
+    import os
 
-# Generar el archivo de objeto con llc
-os.system('llc -filetype=obj output.ll -o output.obj')
+    os.system('llc -filetype=obj output.ll -o output.obj')
 
-# Compilar el archivo de objeto con Clang
-os.system('clang output.obj -o output.exe')
+    os.system('clang output.obj -o output.exe')
 
-# Ejecutar el ejecutable generado
-os.system('./output.exe')
+    os.system('output.exe')
+
+if __name__ == '__main__':
+    main()

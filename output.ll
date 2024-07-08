@@ -1,4 +1,4 @@
-; ModuleID = "s:\Hackatones\Primer Hackaton Código Facilito\CoCody-Compiler\codegen.py"
+; ModuleID = "S:\Hackatones\Primer Hackaton Código Facilito\CoCody-Compiler\codegen.py"
 target triple = "x86_64-pc-windows-msvc"
 target datalayout = ""
 

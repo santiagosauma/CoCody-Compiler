@@ -20,7 +20,7 @@ class Lexer():
         self.lexer.add('SUB', r'\-')
         self.lexer.add('MUL', r'\*')
         self.lexer.add('DIV', r'\/')
-        self.lexer.add('MOD', r'%')  # Añadido el operador de módulo
+        self.lexer.add('MOD', r'%')
         self.lexer.add('EQ', r'==')
         self.lexer.add('NEQ', r'!=')
         self.lexer.add('GT', r'>')
@@ -29,7 +29,7 @@ class Lexer():
         self.lexer.add('LTE', r'<=')
         self.lexer.add('NUMBER', r'\d+')
         self.lexer.add('IDENTIFICADOR', r'[a-zA-Z_][a-zA-Z0-9_]*')
-        self.lexer.add('STRING', r'"[^"]*"')  # Añadido para manejar cadenas de texto
+        self.lexer.add('STRING', r'"[^"]*"')
         self.lexer.ignore('\s+')
 
     def get_lexer(self):
