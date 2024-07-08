@@ -45,6 +45,16 @@ class Mod(BinaryOp):
     def eval(self):
         return self.builder.srem(self.left.eval(), self.right.eval())
 
+class Pow(BinaryOp):
+    def eval(self):
+        left_val = self.left.eval()
+        right_val = self.right.eval()
+        left_float = self.builder.uitofp(left_val, ir.DoubleType())
+        right_float = self.builder.uitofp(right_val, ir.DoubleType())
+        pow_func = self.module.declare_intrinsic('llvm.pow', [ir.DoubleType()])
+        result = self.builder.call(pow_func, [left_float, right_float])
+        return self.builder.fptoui(result, ir.IntType(32))
+
 class String():
     def __init__(self, builder, module, value):
         self.builder = builder
@@ -60,7 +70,7 @@ class String():
         global_string.initializer = string_constant
         return self.builder.bitcast(global_string, ir.IntType(8).as_pointer())
 
-global_string_counter = 0
+global_string_counter = 0  # Contador global para generar nombres únicos
 
 class Print():
     def __init__(self, builder, module, printf, value):

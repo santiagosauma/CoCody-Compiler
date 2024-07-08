@@ -1,10 +1,10 @@
 from rply import ParserGenerator
-from my_ast import Number, Sum, Sub, Mul, Div, Print, Assign, Identifier, If, While, Condition, String, Mod
+from my_ast import Number, Sum, Sub, Mul, Div, Mod, Pow, Print, Assign, Identifier, If, While, Condition, String
 
 class Parser():
     def __init__(self, module, builder, printf):
         self.pg = ParserGenerator(
-            ['NUMBER', 'MUESTRA', 'OPEN_PAREN', 'CLOSE_PAREN', 'SUM', 'SUB', 'MUL', 'DIV', 'MOD',
+            ['NUMBER', 'MUESTRA', 'OPEN_PAREN', 'CLOSE_PAREN', 'SUM', 'SUB', 'MUL', 'DIV', 'MOD', 'POW',
              'ASIGNA', 'FIN', 'IDENTIFICADOR', 'SI', 'ENTONCES', 'FIN_SI', 'MIENTRAS', 'HACER', 'FIN_MIENTRAS',
              'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'STRING']
         )
@@ -50,6 +50,7 @@ class Parser():
         @self.pg.production('EXPRESION : EXPRESION SUM TERMINO')
         @self.pg.production('EXPRESION : EXPRESION SUB TERMINO')
         @self.pg.production('EXPRESION : EXPRESION MOD TERMINO')
+        @self.pg.production('EXPRESION : EXPRESION POW TERMINO')
         def expresion(p):
             left = p[0]
             right = p[2]
@@ -60,6 +61,8 @@ class Parser():
                 return Sub(self.builder, self.module, left, right)
             elif operator.gettokentype() == 'MOD':
                 return Mod(self.builder, self.module, left, right)
+            elif operator.gettokentype() == 'POW':
+                return Pow(self.builder, self.module, left, right)
 
         @self.pg.production('EXPRESION : TERMINO')
         def expresion_termino(p):
