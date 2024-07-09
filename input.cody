@@ -1,6 +1,5 @@
-mi_lista <- [1, 2, 3, 4, 5] FIN
-valor <- mi_lista[2] FIN
-muestra(valor) FIN
-mi_lista[2] <- 10 FIN
-nuevo_valor <- mi_lista[2] FIN
-muestra(nuevo_valor) FIN
+i <- 0 FIN
+mientras (i < 5) HACER
+    muestra(i) FIN
+    i <- i + 1 FIN
+FIN_MIENTRAS

@@ -2,7 +2,7 @@ from llvmlite import ir, binding
 import numpy as np
 from numba import njit
 
-class CodeGen():
+class CodeGen:
     def __init__(self):
         self.binding = binding
         self.binding.initialize()
@@ -36,6 +36,7 @@ class CodeGen():
     def _compile_ir(self):
         self.builder.ret_void()
         llvm_ir = str(self.module)
+        print(llvm_ir)  # Print the generated LLVM IR for debugging
         mod = self.binding.parse_assembly(llvm_ir)
         mod.verify()
         self.engine.add_module(mod)
@@ -49,7 +50,3 @@ class CodeGen():
     def save_ir(self, filename):
         with open(filename, 'w') as output_file:
             output_file.write(str(self.module))
-
-    def execute(self, function):
-        njit_function = njit(function)
-        njit_function()

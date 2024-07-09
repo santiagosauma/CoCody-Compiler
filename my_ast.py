@@ -87,8 +87,9 @@ class Print:
         value = self.value.eval(context)
         voidptr_ty = ir.IntType(8).as_pointer()
 
-        if isinstance(value, String):
+        if isinstance(self.value, String):
             fmt = "%s \n\0"
+            value = self.builder.bitcast(value, voidptr_ty)  # Ensure value is a pointer for strings
         else:
             fmt = "%i \n\0"
 
@@ -128,17 +129,18 @@ class Assign:
                 context[self.name] = value
         else:
             # Handle scalar values
-            if isinstance(value, ir.Constant):
-                value_type = value.type
-            else:
+            if not isinstance(value, ir.Value):
                 value = ir.Constant(ir.IntType(32), value)
-                value_type = value.type
 
             if self.name not in self.module.globals:
-                var = ir.GlobalVariable(self.module, value_type, self.name)
-                var.initializer = ir.Constant(value_type, None)
+                var = ir.GlobalVariable(self.module, value.type, self.name)
+                var.initializer = ir.Constant(value.type, None)
+                var.linkage = 'internal'
+                var.global_constant = False
+                context[self.name] = value
             else:
                 var = self.module.globals[self.name]
+
             self.builder.store(value, var)
             context[self.name] = value
 
@@ -151,18 +153,27 @@ class Condition:
         self.operator = operator
 
     def eval(self, context):
+        left_val = self.left.eval(context)
+        right_val = self.right.eval(context)
+
+        # Ensure both operands are LLVM IR values
+        if not isinstance(left_val, ir.Value):
+            left_val = ir.Constant(ir.IntType(32), left_val)
+        if not isinstance(right_val, ir.Value):
+            right_val = ir.Constant(ir.IntType(32), right_val)
+
         if self.operator == 'EQ':
-            return self.builder.icmp_signed('==', self.left.eval(context), self.right.eval(context))
+            return self.builder.icmp_signed('==', left_val, right_val)
         elif self.operator == 'NEQ':
-            return self.builder.icmp_signed('!=', self.left.eval(context), self.right.eval(context))
+            return self.builder.icmp_signed('!=', left_val, right_val)
         elif self.operator == 'GT':
-            return self.builder.icmp_signed('>', self.left.eval(context), self.right.eval(context))
+            return self.builder.icmp_signed('>', left_val, right_val)
         elif self.operator == 'LT':
-            return self.builder.icmp_signed('<', self.left.eval(context), self.right.eval(context))
+            return self.builder.icmp_signed('<', left_val, right_val)
         elif self.operator == 'GTE':
-            return self.builder.icmp_signed('>=', self.left.eval(context), self.right.eval(context))
+            return self.builder.icmp_signed('>=', left_val, right_val)
         elif self.operator == 'LTE':
-            return self.builder.icmp_signed('<=', self.left.eval(context), self.right.eval(context))
+            return self.builder.icmp_signed('<=', left_val, right_val)
 
 class If:
     def __init__(self, builder, module, printf, condition, body):
