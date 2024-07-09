@@ -1,5 +1,6 @@
-i <- 0 FIN
-mientras (i < 5) HACER
-    muestra(i) FIN
-    i <- i + 1 FIN
-FIN_MIENTRAS
+mi_lista <- [10, 20, 30, 40, 50] FIN
+primer_valor <- mi_lista[0] FIN
+muestra(primer_valor) FIN
+mi_lista[0] <- 100 FIN
+nuevo_primer_valor <- mi_lista[0] FIN
+muestra(nuevo_primer_valor) FIN
