@@ -1,12 +1,12 @@
 from rply import ParserGenerator
-from my_ast import Number, Sum, Sub, Mul, Div, Mod, Pow, Print, Assign, Identifier, If, While, For, Condition, String
+from my_ast import Number, Sum, Sub, Mul, Div, Mod, Pow, Print, Assign, Identifier, If, While, Condition, String, List, ListAccess, ListAssign
 
 class Parser():
     def __init__(self, module, builder, printf):
         self.pg = ParserGenerator(
             ['NUMBER', 'MUESTRA', 'OPEN_PAREN', 'CLOSE_PAREN', 'SUM', 'SUB', 'MUL', 'DIV', 'MOD', 'POW',
              'ASIGNA', 'FIN', 'IDENTIFICADOR', 'SI', 'ENTONCES', 'FIN_SI', 'MIENTRAS', 'HACER', 'FIN_MIENTRAS',
-             'DESDE', 'HASTA', 'INCREMENTO', 'FIN_DESDE', 'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'STRING']
+             'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'STRING', 'OPEN_BRACKET', 'CLOSE_BRACKET', 'COMMA']
         )
         self.module = module
         self.builder = builder
@@ -28,7 +28,7 @@ class Parser():
         @self.pg.production('INSTRUCCION : MUESTRA_INSTRUCCION')
         @self.pg.production('INSTRUCCION : SI_INSTRUCCION')
         @self.pg.production('INSTRUCCION : MIENTRAS_INSTRUCCION')
-        @self.pg.production('INSTRUCCION : DESDE_INSTRUCCION')
+        @self.pg.production('INSTRUCCION : LIST_ASSIGN_INSTRUCCION')
         def instruccion(p):
             return p[0]
 
@@ -47,15 +47,6 @@ class Parser():
         @self.pg.production('MIENTRAS_INSTRUCCION : MIENTRAS OPEN_PAREN CONDICION CLOSE_PAREN HACER INSTRUCCION_LIST FIN_MIENTRAS')
         def mientras_instruccion(p):
             return While(self.builder, self.module, self.printf, p[2], p[5])
-
-        @self.pg.production('DESDE_INSTRUCCION : DESDE IDENTIFICADOR ASIGNA EXPRESION HASTA EXPRESION INCREMENTO EXPRESION HACER INSTRUCCION_LIST FIN_DESDE')
-        def desde_instruccion(p):
-            var_name = p[1].getstr()
-            var_start = p[3]
-            var_end = p[5]
-            var_step = p[7]
-            body = p[9]
-            return For(self.builder, self.module, self.printf, var_name, var_start, var_end, var_step, body)
 
         @self.pg.production('EXPRESION : EXPRESION SUM TERMINO')
         @self.pg.production('EXPRESION : EXPRESION SUB TERMINO')
@@ -108,6 +99,29 @@ class Parser():
         @self.pg.production('FACTOR : STRING')
         def factor_string(p):
             return String(self.builder, self.module, p[0].getstr())
+
+        @self.pg.production('FACTOR : LIST')
+        def factor_list(p):
+            return p[0]
+
+        @self.pg.production('LIST : OPEN_BRACKET LIST_ELEMENTS CLOSE_BRACKET')
+        def list(p):
+            return List(p[1])
+
+        @self.pg.production('LIST_ELEMENTS : EXPRESION COMMA LIST_ELEMENTS')
+        @self.pg.production('LIST_ELEMENTS : EXPRESION')
+        def list_elements(p):
+            if len(p) == 3:
+                return [p[0]] + p[2]
+            return [p[0]]
+
+        @self.pg.production('LIST_ASSIGN_INSTRUCCION : IDENTIFICADOR OPEN_BRACKET EXPRESION CLOSE_BRACKET ASIGNA EXPRESION FIN')
+        def list_assign_instruccion(p):
+            return ListAssign(p[0].getstr(), p[2], p[5])
+
+        @self.pg.production('EXPRESION : IDENTIFICADOR OPEN_BRACKET EXPRESION CLOSE_BRACKET')
+        def list_access(p):
+            return ListAccess(p[0].getstr(), p[2])
 
         @self.pg.production('CONDICION : EXPRESION EQ EXPRESION')
         @self.pg.production('CONDICION : EXPRESION NEQ EXPRESION')

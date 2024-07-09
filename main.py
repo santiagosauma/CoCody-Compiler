@@ -16,10 +16,6 @@ def main():
     lexer = Lexer().get_lexer()
     tokens = list(lexer.lex(text_input))
 
-    # Imprimir los tokens generados para depuración
-    # for token in tokens:
-    #     print(f"Token: {token.gettokentype()}, Valor: {token.getstr()}, Posición: {token.getsourcepos().lineno}:{token.getsourcepos().colno}")
-
     codegen = CodeGen()
     module = codegen.module
     builder = codegen.builder
@@ -30,18 +26,21 @@ def main():
     parser = pg.get_parser()
     parsed_program = parser.parse(iter(tokens))
 
-    for stmt in parsed_program:
-        stmt.eval()
+    # Context to store variables
+    context = {}
 
+    # Evaluate the parsed program
+    for stmt in parsed_program:
+        stmt.eval(context)
+
+    # Create IR and save it
     codegen.create_ir()
     codegen.save_ir("output.ll")
 
     import os
 
     os.system('llc -filetype=obj output.ll -o output.obj')
-
     os.system('clang output.obj -o output.exe')
-
     os.system('output.exe')
 
 if __name__ == '__main__':

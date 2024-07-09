@@ -1,13 +1,6 @@
-a <- 0 FIN
-b <- 10 FIN
-
-desde i <- 0 hasta 10 incremento 1 HACER
-    muestra(a) FIN
-    a <- a + 1 FIN
-FIN_DESDE
-
-muestra(a) FIN
-
-si (a == 10) ENTONCES
-    muestra("El valor de a es 10") FIN
-FIN_SI
+mi_lista <- [1, 2, 3, 4, 5] FIN
+valor <- mi_lista[2] FIN
+muestra(valor) FIN
+mi_lista[2] <- 10 FIN
+nuevo_valor <- mi_lista[2] FIN
+muestra(nuevo_valor) FIN

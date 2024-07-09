@@ -1,4 +1,6 @@
 from llvmlite import ir, binding
+import numpy as np
+from numba import njit
 
 class CodeGen():
     def __init__(self):
@@ -47,3 +49,7 @@ class CodeGen():
     def save_ir(self, filename):
         with open(filename, 'w') as output_file:
             output_file.write(str(self.module))
+
+    def execute(self, function):
+        njit_function = njit(function)
+        njit_function()
