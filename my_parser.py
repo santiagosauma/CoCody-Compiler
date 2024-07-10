@@ -117,11 +117,11 @@ class Parser():
 
         @self.pg.production('LIST_ASSIGN_INSTRUCCION : IDENTIFICADOR OPEN_BRACKET EXPRESION CLOSE_BRACKET ASIGNA EXPRESION FIN')
         def list_assign_instruccion(p):
-            return ListAssign(p[0].getstr(), p[2], p[5])
+            return ListAssign(self.builder, p[0].getstr(), p[2], p[5])
 
         @self.pg.production('EXPRESION : IDENTIFICADOR OPEN_BRACKET EXPRESION CLOSE_BRACKET')
         def list_access(p):
-            return ListAccess(p[0].getstr(), p[2])
+            return ListAccess(self.builder, p[0].getstr(), p[2])
 
         @self.pg.production('CONDICION : EXPRESION EQ EXPRESION')
         @self.pg.production('CONDICION : EXPRESION NEQ EXPRESION')
