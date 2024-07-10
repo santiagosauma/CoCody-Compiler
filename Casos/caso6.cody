@@ -1,0 +1,7 @@
+i <- 0 FIN
+mientras (i < 10) HACER
+    si (i % 2 == 0) ENTONCES
+        muestra(i) FIN
+    FIN_SI
+    i <- i + 1 FIN
+FIN_MIENTRAS

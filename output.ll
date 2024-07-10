@@ -9,22 +9,28 @@ entry:
   br label %"cond_block"
 cond_block:
   %".4" = load i32, i32* @"i"
-  %".5" = icmp slt i32 %".4", 5
+  %".5" = icmp slt i32 %".4", 10
   br i1 %".5", label %"loop", label %"afterloop"
 loop:
   %".7" = load i32, i32* @"i"
-  %".8" = bitcast [5 x i8]* @"fstr0" to i8*
-  %".9" = call i32 (i8*, ...) @"printf"(i8* %".8", i32 1)
-  %".10" = load i32, i32* @"i"
-  %".11" = add i32 %".10", 1
-  store i32 %".11", i32* @"i"
-  br label %"cond_block"
+  %".8" = srem i32 %".7", 2
+  %".9" = icmp eq i32 %".8", 0
+  br i1 %".9", label %"then", label %"endif"
 afterloop:
   ret void
+then:
+  %".11" = load i32, i32* @"i"
+  %".12" = bitcast [5 x i8]* @"fstr0" to i8*
+  %".13" = call i32 (i8*, ...) @"printf"(i8* %".12", i32 %".11")
+  br label %"endif"
+endif:
+  %".15" = load i32, i32* @"i"
+  %".16" = add i32 %".15", 1
+  store i32 %".16", i32* @"i"
+  br label %"cond_block"
 }
 
 declare i32 @"printf"(i8* %".1", ...)
 
-@"mi_lista" = internal global [5 x i32] [i32 1, i32 2, i32 3, i32 4, i32 5]
 @"i" = internal global i32 0
 @"fstr0" = internal constant [5 x i8] c"%i \0a\00"
