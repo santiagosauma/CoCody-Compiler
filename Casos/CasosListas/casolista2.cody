@@ -1,0 +1,8 @@
+mi_lista <- [5, 15, 25, 35, 45] FIN
+valor <- mi_lista[2] FIN
+si (valor > 20) ENTONCES
+    muestra("El valor es mayor que 20") FIN
+FIN_SI
+si (valor < 30) ENTONCES
+    muestra("El valor es menor que 30") FIN
+FIN_SI

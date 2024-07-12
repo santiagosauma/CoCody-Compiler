@@ -1,5 +1,4 @@
 from llvmlite import ir
-import numpy as np
 
 class Number:
     def __init__(self, builder, module, value):
@@ -17,7 +16,7 @@ class Identifier:
         self.name = name
 
     def eval(self, context):
-        return self.builder.load(self.module.globals[self.name])
+        return self.builder.load(context[self.name])
 
 class BinaryOp:
     def __init__(self, builder, module, left, right):
@@ -133,19 +132,6 @@ class List:
                 evaluated_elements.append(eval_element)
         return evaluated_elements
 
-def get_index_value(builder, index):
-    if isinstance(index, ir.Constant):
-        return int(index.constant)
-    elif isinstance(index, ir.LoadInstr):
-        if isinstance(index.operands[0], ir.GlobalVariable) and hasattr(index.operands[0], 'initializer'):
-            return int(index.operands[0].initializer.constant)
-    elif isinstance(index, ir.Value) and hasattr(index, 'constant'):
-        return int(index.constant)
-    elif isinstance(index, int):
-        return index
-    else:
-        raise TypeError(f"Unsupported index type: {type(index)}")
-
 class ListAccess:
     def __init__(self, builder, module, name, index):
         self.builder = builder
@@ -154,12 +140,12 @@ class ListAccess:
         self.index = index
 
     def eval(self, context):
-        array = self.module.globals[self.name]
+        array = context[self.name]
         index = self.index.eval(context)
         
         if not isinstance(index, ir.Value):
-            raise TypeError("Index must be an LLVM value")
-
+            index = ir.Constant(ir.IntType(32), int(index.constant))
+        
         value_ptr = self.builder.gep(array, [ir.Constant(ir.IntType(32), 0), index])
         value = self.builder.load(value_ptr)
         
@@ -174,18 +160,14 @@ class ListAssign:
         self.value = value
 
     def eval(self, context):
-        array = self.module.globals[self.name]
+        array = context[self.name]
         index = self.index.eval(context)
         value = self.value.eval(context)
 
-        # Ensure the index is dynamically fetched and within bounds
         if not isinstance(index, ir.Value):
-            raise TypeError("Index must be an LLVM value")
-
-        # Get the pointer to the array element
+            index = ir.Constant(ir.IntType(32), int(index.constant))
+        
         element_ptr = self.builder.gep(array, [ir.Constant(ir.IntType(32), 0), index])
-
-        # Store the value into the array element
         self.builder.store(value, element_ptr)
 
 class Assign:
@@ -206,7 +188,7 @@ class Assign:
         else:
             if not isinstance(value, ir.Value):
                 value = ir.Constant(ir.IntType(32), value)
-            if self.name not in self.module.globals:
+            if self.name not in context:
                 var = ir.GlobalVariable(self.module, value.type, self.name)
                 var.initializer = ir.Constant(value.type, None)
                 var.linkage = 'internal'

@@ -1,0 +1,10 @@
+mi_lista <- [10, 20, 30, 40, 50] FIN
+i <- 0 FIN
+mientras (i < 5) HACER
+    si (mi_lista[i] < 30) ENTONCES
+        mi_lista[i] <- mi_lista[i] + 5 FIN
+    FIN_SI
+    valor <- mi_lista[i] FIN
+    muestra(valor) FIN
+    i <- i + 1 FIN
+FIN_MIENTRAS

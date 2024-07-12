@@ -18,7 +18,7 @@ class Lexer():
         self.lexer.add('CLOSE_PAREN', r'\)')
         self.lexer.add('OPEN_BRACKET', r'\[')
         self.lexer.add('CLOSE_BRACKET', r'\]')
-        self.lexer.add('COMMA', r',')  # Token for comma
+        self.lexer.add('COMMA', r',')
         self.lexer.add('POW', r'\*\*')
         self.lexer.add('MUL', r'\*')
         self.lexer.add('DIV', r'\/')

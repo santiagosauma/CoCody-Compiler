@@ -1,0 +1,8 @@
+lista1 <- [1, 2, 3] FIN
+lista2 <- [4, 5, 6] FIN
+i <- 0 FIN
+mientras (i < 3) HACER
+    suma <- lista1[i] + lista2[i] FIN
+    muestra(suma) FIN
+    i <- i + 1 FIN
+FIN_MIENTRAS
