@@ -60,6 +60,8 @@ class Parser():
         @self.pg.production('EXPRESION : EXPRESION SUB TERMINO')
         @self.pg.production('EXPRESION : EXPRESION MOD TERMINO')
         @self.pg.production('EXPRESION : EXPRESION POW TERMINO')
+        @self.pg.production('EXPRESION : EXPRESION MUL TERMINO')
+        @self.pg.production('EXPRESION : EXPRESION DIV TERMINO')
         def expresion(p):
             left = p[0]
             right = p[2]
@@ -72,21 +74,14 @@ class Parser():
                 return Mod(self.builder, self.module, left, right)
             elif operator.gettokentype() == 'POW':
                 return Pow(self.builder, self.module, left, right)
+            elif operator.gettokentype() == 'MUL':
+                return Mul(self.builder, self.module, left, right)
+            elif operator.gettokentype() == 'DIV':
+                return Div(self.builder, self.module, left, right)
 
         @self.pg.production('EXPRESION : TERMINO')
         def expresion_termino(p):
             return p[0]
-
-        @self.pg.production('TERMINO : TERMINO MUL FACTOR')
-        @self.pg.production('TERMINO : TERMINO DIV FACTOR')
-        def termino(p):
-            left = p[0]
-            right = p[2]
-            operator = p[1]
-            if operator.gettokentype() == 'MUL':
-                return Mul(self.builder, self.module, left, right)
-            elif operator.gettokentype() == 'DIV':
-                return Div(self.builder, self.module, left, right)
 
         @self.pg.production('TERMINO : FACTOR')
         def termino_factor(p):
@@ -112,6 +107,10 @@ class Parser():
         def factor_list(p):
             return p[0]
 
+        @self.pg.production('FACTOR : IDENTIFICADOR OPEN_BRACKET EXPRESION CLOSE_BRACKET')
+        def factor_list_access(p):
+            return ListAccess(self.builder, self.module, p[0].getstr(), p[2])
+
         @self.pg.production('LIST : OPEN_BRACKET LIST_ELEMENTS CLOSE_BRACKET')
         def list(p):
             return List(p[1])
@@ -126,10 +125,6 @@ class Parser():
         @self.pg.production('LIST_ASSIGN_INSTRUCCION : IDENTIFICADOR OPEN_BRACKET EXPRESION CLOSE_BRACKET ASIGNA EXPRESION FIN')
         def list_assign_instruccion(p):
             return ListAssign(self.builder, self.module, p[0].getstr(), p[2], p[5])
-
-        @self.pg.production('EXPRESION : IDENTIFICADOR OPEN_BRACKET EXPRESION CLOSE_BRACKET')
-        def list_access(p):
-            return ListAccess(self.builder, self.module, p[0].getstr(), p[2])
 
         @self.pg.production('CONDICION : EXPRESION EQ EXPRESION')
         @self.pg.production('CONDICION : EXPRESION NEQ EXPRESION')

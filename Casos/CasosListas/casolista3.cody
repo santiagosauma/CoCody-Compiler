@@ -1,0 +1,11 @@
+mi_lista <- [0, 0, 0, 0, 0] FIN
+i <- 0 FIN
+mientras (i < 5) HACER
+    mi_lista[i] <- i * 10 FIN
+    i <- i + 1 FIN
+FIN_MIENTRAS
+mientras (i > 0) HACER
+    i <- i - 1 FIN
+    valor <- mi_lista[i] FIN
+    muestra(valor) FIN
+FIN_MIENTRAS

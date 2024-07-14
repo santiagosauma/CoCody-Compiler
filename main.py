@@ -16,6 +16,10 @@ def main():
     lexer = Lexer().get_lexer()
     tokens = list(lexer.lex(text_input))
 
+    # Imprimir tokens generados
+    for token in tokens:
+        print(f'Token: {token.gettokentype()}, Valor: {token.getstr()}, Posición: {token.getsourcepos().lineno}:{token.getsourcepos().colno}')
+
     codegen = CodeGen()
     module = codegen.module
     builder = codegen.builder
