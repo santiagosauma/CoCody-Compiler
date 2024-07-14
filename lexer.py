@@ -5,9 +5,13 @@ class Lexer():
         self.lexer = LexerGenerator()
 
     def _add_tokens(self):
+        self.lexer.add('TRADUCIR', r'TRADUCIR')
+        self.lexer.add('DE', r'DE')
+        self.lexer.add('A', r'A')
         self.lexer.add('MUESTRA', r'muestra')
         self.lexer.add('SI', r'si')
         self.lexer.add('ENTONCES', r'ENTONCES')
+        self.lexer.add('EN', r'EN')
         self.lexer.add('FIN_SI', r'FIN_SI')
         self.lexer.add('MIENTRAS', r'mientras')
         self.lexer.add('HACER', r'HACER')
@@ -34,7 +38,12 @@ class Lexer():
         self.lexer.add('NUMBER', r'\d+')
         self.lexer.add('IDENTIFICADOR', r'[a-zA-Z_][a-zA-Z0-9_]*')
         self.lexer.add('STRING', r'"[^"]*"')
+        # self.lexer.add('LENGUAJE', r'[a-zA-Z]+')
+        self.lexer.ignore(r'\s+')
+
         self.lexer.ignore('\s+')
+        self.lexer.ignore(r'\s+')
+
 
     def get_lexer(self):
         self._add_tokens()
