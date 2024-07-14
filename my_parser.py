@@ -1,12 +1,14 @@
 from rply import ParserGenerator
 from my_ast import Number, Sum, Sub, Mul, Div, Mod, Pow, Print, Assign, Identifier, If, While, Condition, String, List, ListAccess, ListAssign
+from traducir import Traducir
 
 class Parser():
     def __init__(self, module, builder, printf):
         self.pg = ParserGenerator(
             ['NUMBER', 'MUESTRA', 'OPEN_PAREN', 'CLOSE_PAREN', 'SUM', 'SUB', 'MUL', 'DIV', 'MOD', 'POW',
              'ASIGNA', 'FIN', 'IDENTIFICADOR', 'SI', 'ENTONCES', 'FIN_SI', 'MIENTRAS', 'HACER', 'FIN_MIENTRAS',
-             'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'STRING', 'OPEN_BRACKET', 'CLOSE_BRACKET', 'COMMA']
+             'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'STRING', 'OPEN_BRACKET', 'CLOSE_BRACKET', 'COMMA', 
+             'TRADUCIR', 'DE', 'A', 'EN', ] 
         )
         self.module = module
         self.builder = builder
@@ -29,6 +31,7 @@ class Parser():
         @self.pg.production('INSTRUCCION : SI_INSTRUCCION')
         @self.pg.production('INSTRUCCION : MIENTRAS_INSTRUCCION')
         @self.pg.production('INSTRUCCION : LIST_ASSIGN_INSTRUCCION')
+        @self.pg.production('INSTRUCCION : TRADUCIR_INSTRUCCION')  # Incluir la producción
         def instruccion(p):
             return p[0]
 
@@ -47,6 +50,11 @@ class Parser():
         @self.pg.production('MIENTRAS_INSTRUCCION : MIENTRAS OPEN_PAREN CONDICION CLOSE_PAREN HACER INSTRUCCION_LIST FIN_MIENTRAS')
         def mientras_instruccion(p):
             return While(self.builder, self.module, self.printf, p[2], p[5])
+        
+        @self.pg.production('TRADUCIR_INSTRUCCION : TRADUCIR DE STRING A STRING EN STRING FIN')
+        def traducir_cody(p):
+            nombre_archivo = f"{p[4].getstr().strip('\"')}.{p[6].getstr()}"
+            return Traducir(p[2].getstr(), nombre_archivo, p[6].getstr())
 
         @self.pg.production('EXPRESION : EXPRESION SUM TERMINO')
         @self.pg.production('EXPRESION : EXPRESION SUB TERMINO')
