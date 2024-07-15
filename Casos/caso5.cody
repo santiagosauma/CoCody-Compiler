@@ -1,6 +1,0 @@
-mi_lista <- [1, 2, 3, 4, 5] FIN
-i <- 0 FIN
-mientras (i < 5) HACER
-    muestra(mi_lista[i]) FIN
-    i <- i + 1 FIN
-FIN_MIENTRAS

@@ -1,5 +1,5 @@
-x <- 0 FIN
+x <- 0.
 ciclo i desde 0 hasta 10 ejecutar
-    x <- x + i FIN
+    x <- x + i.
 fin_ciclo
-muestra(x) FIN
+muestra(x).

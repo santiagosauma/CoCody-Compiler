@@ -1,9 +1,9 @@
-mi_lista <- [5, 10, 15, 20, 25] FIN
-i <- 0 FIN
+mi_lista <- [5, 10, 15, 20, 25].
+i <- 0.
 mientras (i < 5) HACER
     si (mi_lista[i] % 2 == 0) ENTONCES
-        muestra("Valor par encontrado") FIN
+        muestra("Valor par encontrado").
     FIN_SI
-    muestra(mi_lista[i]) FIN
-    i <- i + 1 FIN
+    muestra(mi_lista[i]).
+    i <- i + 1.
 FIN_MIENTRAS

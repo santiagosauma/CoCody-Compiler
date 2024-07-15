@@ -1,5 +1,0 @@
-i <- 0 FIN
-mientras (i < 5) HACER
-    muestra(i) FIN
-    i <- i + 1 FIN
-FIN_MIENTRAS

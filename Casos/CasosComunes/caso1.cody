@@ -1,0 +1,14 @@
+a <- 5 .
+b <- 3 .
+suma <- a + b.
+muestra(suma).
+resta <- a - b.
+muestra(resta).
+multiplicacion <- a * b.
+muestra(multiplicacion).
+division <- a / b.
+muestra(division).
+modulo <- a % b.
+muestra(modulo).
+potencia <- a ** b.
+muestra(potencia).

@@ -18,6 +18,7 @@ class Lexer():
         self.lexer.add('EJECUTAR', r'ejecutar')
         self.lexer.add('FIN_CICLO', r'fin_ciclo')
         self.lexer.add('ASIGNA', r'<-')
+        self.lexer.add('DOT', r'\.')
         self.lexer.add('FIN', r'FIN')
         self.lexer.add('OPEN_PAREN', r'\(')
         self.lexer.add('CLOSE_PAREN', r'\)')

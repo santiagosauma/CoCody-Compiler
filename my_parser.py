@@ -5,7 +5,7 @@ class Parser():
     def __init__(self, module, builder, printf):
         self.pg = ParserGenerator(
             ['NUMBER', 'MUESTRA', 'OPEN_PAREN', 'CLOSE_PAREN', 'SUM', 'SUB', 'MUL', 'DIV', 'MOD', 'POW',
-             'ASIGNA', 'FIN', 'IDENTIFICADOR', 'SI', 'ENTONCES', 'FIN_SI', 'MIENTRAS', 'HACER', 'FIN_MIENTRAS',
+             'ASIGNA', 'DOT', 'FIN', 'IDENTIFICADOR', 'SI', 'ENTONCES', 'FIN_SI', 'MIENTRAS', 'HACER', 'FIN_MIENTRAS',
              'CICLO', 'DESDE', 'HASTA', 'EJECUTAR', 'FIN_CICLO',
              'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'STRING', 'OPEN_BRACKET', 'CLOSE_BRACKET', 'COMMA']
         )
@@ -22,8 +22,11 @@ class Parser():
         @self.pg.production('INSTRUCCION_LIST : INSTRUCCION')
         def instruccion_list(p):
             if len(p) == 2:
-                return [p[0]] + p[1]
-            return [p[0]]
+                result = [p[0]] + p[1]
+            else:
+                result = [p[0]]
+            print(f'INSTRUCCION_LIST: {result}')  # Debugging output
+            return result
 
         @self.pg.production('INSTRUCCION : ASIGNA_INSTRUCCION')
         @self.pg.production('INSTRUCCION : MUESTRA_INSTRUCCION')
@@ -36,13 +39,15 @@ class Parser():
 
         @self.pg.production('CICLO_INSTRUCCION : CICLO IDENTIFICADOR DESDE EXPRESION HASTA EXPRESION EJECUTAR INSTRUCCION_LIST FIN_CICLO')
         def ciclo_instruccion(p):
-            return ForLoop(self.builder, self.module, self.printf, p[1].getstr(), p[3], p[5], p[7])
+            result = ForLoop(self.builder, self.module, self.printf, p[1].getstr(), p[3], p[5], p[7])
+            print(f'CICLO_INSTRUCCION: {result.body}')  # Debugging output
+            return result
 
-        @self.pg.production('ASIGNA_INSTRUCCION : IDENTIFICADOR ASIGNA EXPRESION FIN')
+        @self.pg.production('ASIGNA_INSTRUCCION : IDENTIFICADOR ASIGNA EXPRESION DOT')
         def asigna_instruccion(p):
             return Assign(self.builder, self.module, p[0].getstr(), p[2])
 
-        @self.pg.production('MUESTRA_INSTRUCCION : MUESTRA OPEN_PAREN EXPRESION CLOSE_PAREN FIN')
+        @self.pg.production('MUESTRA_INSTRUCCION : MUESTRA OPEN_PAREN EXPRESION CLOSE_PAREN DOT')
         def muestra_instruccion(p):
             return Print(self.builder, self.module, self.printf, p[2])
 
@@ -120,7 +125,7 @@ class Parser():
                 return [p[0]] + p[2]
             return [p[0]]
 
-        @self.pg.production('LIST_ASSIGN_INSTRUCCION : IDENTIFICADOR OPEN_BRACKET EXPRESION CLOSE_BRACKET ASIGNA EXPRESION FIN')
+        @self.pg.production('LIST_ASSIGN_INSTRUCCION : IDENTIFICADOR OPEN_BRACKET EXPRESION CLOSE_BRACKET ASIGNA EXPRESION DOT')
         def list_assign_instruccion(p):
             return ListAssign(self.builder, self.module, p[0].getstr(), p[2], p[5])
 
