@@ -1,0 +1,7 @@
+x <- 0 FIN
+ciclo i desde 0 hasta 2 ejecutar
+    ciclo j desde 0 hasta 2 ejecutar
+        x <- x + 1 FIN
+    fin_ciclo
+fin_ciclo
+muestra(x) FIN

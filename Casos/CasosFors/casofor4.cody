@@ -1,0 +1,7 @@
+x <- 0 FIN
+ciclo i desde 0 hasta 10 ejecutar
+    si (i % 2 == 0) ENTONCES
+        x <- x + i FIN
+    FIN_SI
+fin_ciclo
+muestra(x) FIN

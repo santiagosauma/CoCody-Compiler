@@ -1,11 +1,12 @@
 from rply import ParserGenerator
-from my_ast import Number, Sum, Sub, Mul, Div, Mod, Pow, Print, Assign, Identifier, If, While, Condition, String, List, ListAccess, ListAssign
+from my_ast import Number, Sum, Sub, Mul, Div, Mod, Pow, Print, Assign, Identifier, If, While, ForLoop, Condition, String, List, ListAccess, ListAssign
 
 class Parser():
     def __init__(self, module, builder, printf):
         self.pg = ParserGenerator(
             ['NUMBER', 'MUESTRA', 'OPEN_PAREN', 'CLOSE_PAREN', 'SUM', 'SUB', 'MUL', 'DIV', 'MOD', 'POW',
              'ASIGNA', 'FIN', 'IDENTIFICADOR', 'SI', 'ENTONCES', 'FIN_SI', 'MIENTRAS', 'HACER', 'FIN_MIENTRAS',
+             'CICLO', 'DESDE', 'HASTA', 'EJECUTAR', 'FIN_CICLO',
              'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'STRING', 'OPEN_BRACKET', 'CLOSE_BRACKET', 'COMMA']
         )
         self.module = module
@@ -28,9 +29,14 @@ class Parser():
         @self.pg.production('INSTRUCCION : MUESTRA_INSTRUCCION')
         @self.pg.production('INSTRUCCION : SI_INSTRUCCION')
         @self.pg.production('INSTRUCCION : MIENTRAS_INSTRUCCION')
+        @self.pg.production('INSTRUCCION : CICLO_INSTRUCCION')
         @self.pg.production('INSTRUCCION : LIST_ASSIGN_INSTRUCCION')
         def instruccion(p):
             return p[0]
+
+        @self.pg.production('CICLO_INSTRUCCION : CICLO IDENTIFICADOR DESDE EXPRESION HASTA EXPRESION EJECUTAR INSTRUCCION_LIST FIN_CICLO')
+        def ciclo_instruccion(p):
+            return ForLoop(self.builder, self.module, self.printf, p[1].getstr(), p[3], p[5], p[7])
 
         @self.pg.production('ASIGNA_INSTRUCCION : IDENTIFICADOR ASIGNA EXPRESION FIN')
         def asigna_instruccion(p):
