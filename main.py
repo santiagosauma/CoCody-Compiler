@@ -28,7 +28,12 @@ def main():
     pg = Parser(module, builder, printf)
     pg.parse()
     parser = pg.get_parser()
-    parsed_program = parser.parse(iter(tokens))
+
+    try:
+        parsed_program = parser.parse(iter(tokens))
+    except ValueError as e:
+        print(f"Error during parsing: {e}")
+        sys.exit(1)
 
     # Context to store variables
     context = {}

@@ -328,3 +328,32 @@ class ForLoop:
         self.builder.branch(cond_block)
 
         self.builder.position_at_end(after_loop_block)
+
+class LengthFunc:
+    def __init__(self, builder, module, name):
+        self.builder = builder
+        self.module = module
+        self.name = name
+
+    def eval(self, context):
+        array = context[self.name]
+        array_type = array.type.pointee
+        length = array_type.count
+        return ir.Constant(ir.IntType(32), length)
+    
+class FunctionCall:
+    def __init__(self, builder, module, name, args):
+        self.builder = builder
+        self.module = module
+        self.name = name
+        self.args = args
+
+    def eval(self, context):
+        if self.name == 'length':
+            array_name = self.args[0]
+            array = context[array_name]
+            array_type = array.type.pointee
+            length = array_type.count
+            return ir.Constant(ir.IntType(32), length)
+        else:
+            raise NotImplementedError(f"Function '{self.name}' is not implemented")

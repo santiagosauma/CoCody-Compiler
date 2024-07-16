@@ -1,13 +1,14 @@
 from rply import ParserGenerator
-from my_ast import Number, Sum, Sub, Mul, Div, Mod, Pow, Print, Assign, Identifier, If, While, ForLoop, Condition, String, List, ListAccess, ListAssign
+from my_ast import Number, Sum, Sub, Mul, Div, Mod, Pow, Print, Assign, Identifier, If, While, ForLoop, Condition, String, List, ListAccess, ListAssign, LengthFunc, FunctionCall
 
 class Parser():
     def __init__(self, module, builder, printf):
         self.pg = ParserGenerator(
-            ['NUMBER', 'MUESTRA', 'OPEN_PAREN', 'CLOSE_PAREN', 'SUM', 'SUB', 'MUL', 'DIV', 'MOD', 'POW',
-             'ASIGNA', 'DOT', 'FIN', 'IDENTIFICADOR', 'SI', 'ENTONCES', 'FIN_SI', 'MIENTRAS', 'HACER', 'FIN_MIENTRAS',
+            ['NUMBER', 'STRING', 'ASIGNA', 'SUM', 'SUB', 'MUL', 'DIV', 'MOD', 'POW',
+             'OPEN_PAREN', 'CLOSE_PAREN', 'OPEN_BRACKET', 'CLOSE_BRACKET', 'COMMA', 'DOT', 
+             'MUESTRA', 'SI', 'ENTONCES', 'FIN_SI', 'MIENTRAS', 'HACER', 'FIN_MIENTRAS',
              'CICLO', 'DESDE', 'HASTA', 'EJECUTAR', 'FIN_CICLO',
-             'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'STRING', 'OPEN_BRACKET', 'CLOSE_BRACKET', 'COMMA']
+             'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'LENGTH', 'IDENTIFICADOR']
         )
         self.module = module
         self.builder = builder
@@ -22,11 +23,8 @@ class Parser():
         @self.pg.production('INSTRUCCION_LIST : INSTRUCCION')
         def instruccion_list(p):
             if len(p) == 2:
-                result = [p[0]] + p[1]
-            else:
-                result = [p[0]]
-            print(f'INSTRUCCION_LIST: {result}')  # Debugging output
-            return result
+                return [p[0]] + p[1]
+            return [p[0]]
 
         @self.pg.production('INSTRUCCION : ASIGNA_INSTRUCCION')
         @self.pg.production('INSTRUCCION : MUESTRA_INSTRUCCION')
@@ -39,9 +37,7 @@ class Parser():
 
         @self.pg.production('CICLO_INSTRUCCION : CICLO IDENTIFICADOR DESDE EXPRESION HASTA EXPRESION EJECUTAR INSTRUCCION_LIST FIN_CICLO')
         def ciclo_instruccion(p):
-            result = ForLoop(self.builder, self.module, self.printf, p[1].getstr(), p[3], p[5], p[7])
-            print(f'CICLO_INSTRUCCION: {result.body}')  # Debugging output
-            return result
+            return ForLoop(self.builder, self.module, self.printf, p[1].getstr(), p[3], p[5], p[7])
 
         @self.pg.production('ASIGNA_INSTRUCCION : IDENTIFICADOR ASIGNA EXPRESION DOT')
         def asigna_instruccion(p):
@@ -114,6 +110,14 @@ class Parser():
         def factor_list_access(p):
             return ListAccess(self.builder, self.module, p[0].getstr(), p[2])
 
+        @self.pg.production('FACTOR : FUNCTION_CALL')
+        def factor_function_call(p):
+            return p[0]
+
+        @self.pg.production('FUNCTION_CALL : LENGTH OPEN_PAREN IDENTIFICADOR CLOSE_PAREN')
+        def function_call(p):
+            return LengthFunc(self.builder, self.module, p[2].getstr())
+
         @self.pg.production('LIST : OPEN_BRACKET LIST_ELEMENTS CLOSE_BRACKET')
         def list(p):
             return List(p[1])
@@ -143,7 +147,9 @@ class Parser():
 
         @self.pg.error
         def error_handle(token):
-            raise ValueError(f"Error en el token {token.gettokentype()} ({token.getstr()}) en la posición {token.getsourcepos().lineno}:{token.getsourcepos().colno}")
+            if token is None:
+                raise ValueError("Unexpected end of input")
+            raise ValueError(f"Syntax error: Unexpected token {token.gettokentype()} ('{token.getstr()}') at {token.getsourcepos()}")
 
     def get_parser(self):
         return self.pg.build()
