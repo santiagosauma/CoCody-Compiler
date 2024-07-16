@@ -1,0 +1,15 @@
+n <- 10.
+a <- 0.
+b <- 1.
+
+muestra(a).
+muestra(b).
+
+contador <- 2.
+mientras (contador < n) HACER
+    aux <- a + b.
+    muestra(aux).
+    a <- b.
+    b <- aux.
+    contador <- contador + 1.
+FIN_MIENTRAS
