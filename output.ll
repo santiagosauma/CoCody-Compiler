@@ -1,10 +1,14 @@
-; ModuleID = "S:\Hackatones\Primer Hackaton Código Facilito\CoCody-Compiler\codegen.py"
+; ModuleID = "D:\Code Cursos en Local\hack-cody\CoCody-Compiler\codegen.py"
 target triple = "x86_64-pc-windows-msvc"
 target datalayout = ""
 
 define void @"main"()
 {
 entry:
+  ret void
+}
+
+declare i32 @"printf"(i8* %".1", ...)
   store i32 0, i32* @"i"
   br label %"cond_block"
 cond_block:
@@ -26,4 +30,10 @@ afterloop:
 declare i32 @"printf"(i8* %".1", ...)
 
 @"i" = internal global i32 0
+<<<<<<< HEAD
 @"fstr0" = internal constant [5 x i8] c"%i \0a\00"
+=======
+@"str0" = internal constant [21 x i8] c"Valor par encontrado\00"
+@"fstr1" = internal constant [5 x i8] c"%s \0a\00"
+@"fstr2" = internal constant [5 x i8] c"%i \0a\00"
+>>>>>>> origin/feature/add-translate-from-cody-to-language
