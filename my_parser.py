@@ -59,7 +59,7 @@ class Parser():
         def mientras_instruccion(p):
             return While(self.builder, self.module, self.printf, p[2], p[5])
         
-        @self.pg.production('TRADUCIR_INSTRUCCION : TRADUCIR DE STRING A STRING EN STRING FIN')
+        @self.pg.production('TRADUCIR_INSTRUCCION : TRADUCIR DE STRING A STRING EN STRING DOT')
         def traducir_cody(p):
             nombre_archivo = f"{p[4].getstr().strip('\"')}.{p[6].getstr()}"
             return Traducir(p[2].getstr(), nombre_archivo, p[6].getstr())
