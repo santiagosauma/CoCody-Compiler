@@ -36,6 +36,7 @@ class Lexer():
         self.lexer.add('GTE', r'>=')
         self.lexer.add('LTE', r'<=')
         self.lexer.add('NUMBER', r'\d+')
+        self.lexer.add('LENGTH', r'length')
         self.lexer.add('IDENTIFICADOR', r'[a-zA-Z_][a-zA-Z0-9_]*')
         self.lexer.add('STRING', r'"[^"]*"')
         # self.lexer.add('LENGUAJE', r'[a-zA-Z]+')
@@ -44,6 +45,8 @@ class Lexer():
         self.lexer.ignore('\s+')
         self.lexer.ignore(r'\s+')
 
+        self.lexer.add('DOT', r'\.')
+        self.lexer.ignore(r'\s+')
 
     def get_lexer(self):
         self._add_tokens()

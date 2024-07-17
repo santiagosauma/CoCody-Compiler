@@ -1,7 +1,7 @@
-mi_lista <- [2, 4, 6, 8, 10] FIN
-a <- mi_lista[0] FIN
-b <- mi_lista[1] FIN
-suma <- a + b FIN
-muestra(suma) FIN
-producto <- mi_lista[2] * mi_lista[3] FIN
-muestra(producto) FIN
+mi_lista <- [2, 4, 6, 8, 10].
+a <- mi_lista[0].
+b <- mi_lista[1].
+suma <- a + b.
+muestra(suma).
+producto <- mi_lista[2] * mi_lista[3].
+muestra(producto).

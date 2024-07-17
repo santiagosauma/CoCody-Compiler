@@ -1,14 +1,17 @@
 from rply import ParserGenerator
-from my_ast import Number, Sum, Sub, Mul, Div, Mod, Pow, Print, Assign, Identifier, If, While, Condition, String, List, ListAccess, ListAssign
+from my_ast import Number, Sum, Sub, Mul, Div, Mod, Pow, Print, Assign, Identifier, If, While, ForLoop, Condition, String, List, ListAccess, ListAssign, LengthFunc, FunctionCall
+
 from traducir import Traducir
 
 class Parser():
     def __init__(self, module, builder, printf):
         self.pg = ParserGenerator(
-            ['NUMBER', 'MUESTRA', 'OPEN_PAREN', 'CLOSE_PAREN', 'SUM', 'SUB', 'MUL', 'DIV', 'MOD', 'POW',
-             'ASIGNA', 'FIN', 'IDENTIFICADOR', 'SI', 'ENTONCES', 'FIN_SI', 'MIENTRAS', 'HACER', 'FIN_MIENTRAS',
-             'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'STRING', 'OPEN_BRACKET', 'CLOSE_BRACKET', 'COMMA', 
-             'TRADUCIR', 'DE', 'A', 'EN', ] 
+            ['NUMBER', 'STRING', 'ASIGNA', 'SUM', 'SUB', 'MUL', 'DIV', 'MOD', 'POW',
+            'OPEN_PAREN', 'CLOSE_PAREN', 'OPEN_BRACKET', 'CLOSE_BRACKET', 'COMMA', 'DOT', 
+            'MUESTRA', 'SI', 'ENTONCES', 'FIN_SI', 'MIENTRAS', 'HACER', 'FIN_MIENTRAS',
+            'CICLO', 'DESDE', 'HASTA', 'EJECUTAR', 'FIN_CICLO',
+            'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'LENGTH', 'IDENTIFICADOR',
+            'TRADUCIR', 'DE', 'A', 'EN',]
         )
         self.module = module
         self.builder = builder
@@ -30,16 +33,21 @@ class Parser():
         @self.pg.production('INSTRUCCION : MUESTRA_INSTRUCCION')
         @self.pg.production('INSTRUCCION : SI_INSTRUCCION')
         @self.pg.production('INSTRUCCION : MIENTRAS_INSTRUCCION')
+        @self.pg.production('INSTRUCCION : CICLO_INSTRUCCION')
         @self.pg.production('INSTRUCCION : LIST_ASSIGN_INSTRUCCION')
         @self.pg.production('INSTRUCCION : TRADUCIR_INSTRUCCION')  # Incluir la producción
         def instruccion(p):
             return p[0]
 
-        @self.pg.production('ASIGNA_INSTRUCCION : IDENTIFICADOR ASIGNA EXPRESION FIN')
+        @self.pg.production('CICLO_INSTRUCCION : CICLO IDENTIFICADOR DESDE EXPRESION HASTA EXPRESION EJECUTAR INSTRUCCION_LIST FIN_CICLO')
+        def ciclo_instruccion(p):
+            return ForLoop(self.builder, self.module, self.printf, p[1].getstr(), p[3], p[5], p[7])
+
+        @self.pg.production('ASIGNA_INSTRUCCION : IDENTIFICADOR ASIGNA EXPRESION DOT')
         def asigna_instruccion(p):
             return Assign(self.builder, self.module, p[0].getstr(), p[2])
 
-        @self.pg.production('MUESTRA_INSTRUCCION : MUESTRA OPEN_PAREN EXPRESION CLOSE_PAREN FIN')
+        @self.pg.production('MUESTRA_INSTRUCCION : MUESTRA OPEN_PAREN EXPRESION CLOSE_PAREN DOT')
         def muestra_instruccion(p):
             return Print(self.builder, self.module, self.printf, p[2])
 
@@ -111,6 +119,14 @@ class Parser():
         def factor_list_access(p):
             return ListAccess(self.builder, self.module, p[0].getstr(), p[2])
 
+        @self.pg.production('FACTOR : FUNCTION_CALL')
+        def factor_function_call(p):
+            return p[0]
+
+        @self.pg.production('FUNCTION_CALL : LENGTH OPEN_PAREN IDENTIFICADOR CLOSE_PAREN')
+        def function_call(p):
+            return LengthFunc(self.builder, self.module, p[2].getstr())
+
         @self.pg.production('LIST : OPEN_BRACKET LIST_ELEMENTS CLOSE_BRACKET')
         def list(p):
             return List(p[1])
@@ -122,7 +138,7 @@ class Parser():
                 return [p[0]] + p[2]
             return [p[0]]
 
-        @self.pg.production('LIST_ASSIGN_INSTRUCCION : IDENTIFICADOR OPEN_BRACKET EXPRESION CLOSE_BRACKET ASIGNA EXPRESION FIN')
+        @self.pg.production('LIST_ASSIGN_INSTRUCCION : IDENTIFICADOR OPEN_BRACKET EXPRESION CLOSE_BRACKET ASIGNA EXPRESION DOT')
         def list_assign_instruccion(p):
             return ListAssign(self.builder, self.module, p[0].getstr(), p[2], p[5])
 
@@ -140,7 +156,9 @@ class Parser():
 
         @self.pg.error
         def error_handle(token):
-            raise ValueError(f"Error en el token {token.gettokentype()} ({token.getstr()}) en la posición {token.getsourcepos().lineno}:{token.getsourcepos().colno}")
+            if token is None:
+                raise ValueError("Unexpected end of input")
+            raise ValueError(f"Syntax error: Unexpected token {token.gettokentype()} ('{token.getstr()}') at {token.getsourcepos()}")
 
     def get_parser(self):
         return self.pg.build()

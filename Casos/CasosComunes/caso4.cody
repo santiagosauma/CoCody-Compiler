@@ -1,0 +1,6 @@
+mi_lista <- [10, 20, 30, 40, 50].
+primer_valor <- mi_lista[0].
+muestra(primer_valor).
+mi_lista[0] <- 100.
+nuevo_primer_valor <- mi_lista[0].
+muestra(nuevo_primer_valor).

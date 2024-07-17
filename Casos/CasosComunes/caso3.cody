@@ -1,0 +1,5 @@
+i <- 0.
+mientras (i < 5) HACER
+    muestra(i).
+    i <- i + 1.
+FIN_MIENTRAS

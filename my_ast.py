@@ -28,7 +28,7 @@ class BinaryOp:
     def eval_operands(self, context):
         left_val = self.left.eval(context)
         right_val = self.right.eval(context)
-        
+
         if not isinstance(left_val, ir.Value):
             left_val = ir.Constant(ir.IntType(32), left_val)
         if not isinstance(right_val, ir.Value):
@@ -82,14 +82,14 @@ class If:
         cond = self.condition.eval(context)
         then_block = self.builder.append_basic_block('then')
         endif_block = self.builder.append_basic_block('endif')
-        
+
         self.builder.cbranch(cond, then_block, endif_block)
-        
+
         self.builder.position_at_end(then_block)
         for stmt in self.body:
             stmt.eval(context)
         self.builder.branch(endif_block)
-        
+
         self.builder.position_at_end(endif_block)
 
 class While:
@@ -142,13 +142,13 @@ class ListAccess:
     def eval(self, context):
         array = context[self.name]
         index = self.index.eval(context)
-        
+
         if not isinstance(index, ir.Value):
             index = ir.Constant(ir.IntType(32), int(index.constant))
-        
+
         value_ptr = self.builder.gep(array, [ir.Constant(ir.IntType(32), 0), index])
         value = self.builder.load(value_ptr)
-        
+
         return value
 
 class ListAssign:
@@ -166,7 +166,7 @@ class ListAssign:
 
         if not isinstance(index, ir.Value):
             index = ir.Constant(ir.IntType(32), int(index.constant))
-        
+
         element_ptr = self.builder.gep(array, [ir.Constant(ir.IntType(32), 0), index])
         self.builder.store(value, element_ptr)
 
@@ -274,3 +274,86 @@ class Print:
         global_fmt.initializer = c_fmt
         fmt_arg = self.builder.bitcast(global_fmt, voidptr_ty)
         self.builder.call(self.printf, [fmt_arg, value])
+
+class ForLoop:
+    def __init__(self, builder, module, printf, variable, start_expr, end_expr, body):
+        self.builder = builder
+        self.module = module
+        self.printf = printf
+        self.variable = variable
+        self.start_expr = start_expr
+        self.end_expr = end_expr
+        self.body = body
+        print(f'ForLoop body type: {type(self.body)}')  # Debugging output
+
+    def eval(self, context):
+        start_val = self.start_expr.eval(context)
+        end_val = self.end_expr.eval(context)
+
+        if self.variable not in context:
+            loop_var = ir.GlobalVariable(self.module, ir.IntType(32), self.variable)
+            loop_var.initializer = ir.Constant(ir.IntType(32), 0)
+            context[self.variable] = loop_var
+        else:
+            loop_var = context[self.variable]
+
+        self.builder.store(start_val, loop_var)
+
+        cond_block = self.builder.append_basic_block('cond')
+        loop_block = self.builder.append_basic_block('loop')
+        after_loop_block = self.builder.append_basic_block('afterloop')
+
+        self.builder.branch(cond_block)
+        self.builder.position_at_end(cond_block)
+
+        loop_val = self.builder.load(loop_var)
+        cond = self.builder.icmp_signed('<=', loop_val, end_val)
+        self.builder.cbranch(cond, loop_block, after_loop_block)
+
+        self.builder.position_at_end(loop_block)
+
+        # Create new context for the loop
+        new_context = context.copy()
+        new_context[self.variable] = loop_var
+
+        # Evaluate the body of the loop
+        if not isinstance(self.body, list):
+            raise TypeError(f"Expected body to be a list, but got {type(self.body)}")  # Additional debug check
+
+        for stmt in self.body:
+            stmt.eval(new_context)
+
+        incremented_val = self.builder.add(loop_val, ir.Constant(ir.IntType(32), 1))
+        self.builder.store(incremented_val, loop_var)
+        self.builder.branch(cond_block)
+
+        self.builder.position_at_end(after_loop_block)
+
+class LengthFunc:
+    def __init__(self, builder, module, name):
+        self.builder = builder
+        self.module = module
+        self.name = name
+
+    def eval(self, context):
+        array = context[self.name]
+        array_type = array.type.pointee
+        length = array_type.count
+        return ir.Constant(ir.IntType(32), length)
+    
+class FunctionCall:
+    def __init__(self, builder, module, name, args):
+        self.builder = builder
+        self.module = module
+        self.name = name
+        self.args = args
+
+    def eval(self, context):
+        if self.name == 'length':
+            array_name = self.args[0]
+            array = context[array_name]
+            array_type = array.type.pointee
+            length = array_type.count
+            return ir.Constant(ir.IntType(32), length)
+        else:
+            raise NotImplementedError(f"Function '{self.name}' is not implemented")

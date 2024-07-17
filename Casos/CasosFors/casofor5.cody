@@ -1,0 +1,5 @@
+x <- 0.
+ciclo i desde 1 hasta 0 ejecutar
+    x <- x + i.
+fin_ciclo
+muestra(x).
