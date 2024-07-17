@@ -61,7 +61,7 @@ class Parser():
         
         @self.pg.production('TRADUCIR_INSTRUCCION : TRADUCIR DE STRING A STRING EN STRING DOT')
         def traducir_cody(p):
-            nombre_archivo = f"{p[4].getstr().strip('\"')}.{p[6].getstr()}"
+            nombre_archivo = f"""{p[4].getstr().strip('"')}.{p[6].getstr()}"""
             return Traducir(p[2].getstr(), nombre_archivo, p[6].getstr())
 
         @self.pg.production('EXPRESION : EXPRESION SUM TERMINO')
