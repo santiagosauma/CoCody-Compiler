@@ -328,7 +328,7 @@ class ForLoop:
         self.builder.branch(cond_block)
 
         self.builder.position_at_end(after_loop_block)
-
+        
 class LengthFunc:
     def __init__(self, builder, module, name):
         self.builder = builder
@@ -357,3 +357,37 @@ class FunctionCall:
             return ir.Constant(ir.IntType(32), length)
         else:
             raise NotImplementedError(f"Function '{self.name}' is not implemented")
+
+class Expression:
+    def __init__(self, builder, module, left, operator, right):
+        self.builder = builder
+        self.module = module
+        self.left = left
+        self.operator = operator
+        self.right = right
+
+    def eval(self, context):
+        left_val = self.left.eval(context)
+        right_val = self.right.eval(context)
+
+        if not isinstance(left_val, ir.Value):
+            left_val = ir.Constant(ir.IntType(32), left_val)
+        if not isinstance(right_val, ir.Value):
+            right_val = ir.Constant(ir.IntType(32), right_val)
+
+        if self.operator == 'SUM':
+            return self.builder.add(left_val, right_val)
+        elif self.operator == 'SUB':
+            return self.builder.sub(left_val, right_val)
+        elif self.operator == 'MUL':
+            return self.builder.mul(left_val, right_val)
+        elif self.operator == 'DIV':
+            return self.builder.sdiv(left_val, right_val)
+        elif self.operator == 'MOD':
+            return self.builder.srem(left_val, right_val)
+        elif self.operator == 'POW':
+            left_float = self.builder.uitofp(left_val, ir.DoubleType())
+            right_float = self.builder.uitofp(right_val, ir.DoubleType())
+            pow_func = self.module.declare_intrinsic('llvm.pow', [ir.DoubleType()])
+            result = self.builder.call(pow_func, [left_float, right_float])
+            return self.builder.fptoui(result, ir.IntType(32))

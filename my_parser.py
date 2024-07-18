@@ -1,6 +1,5 @@
 from rply import ParserGenerator
-from my_ast import Number, Sum, Sub, Mul, Div, Mod, Pow, Print, Assign, Identifier, If, While, ForLoop, Condition, String, List, ListAccess, ListAssign, LengthFunc, FunctionCall
-
+from my_ast import Number, Sum, Sub, Mul, Div, Mod, Pow, Print, Assign, Identifier, If, While, ForLoop, Condition, String, List, ListAccess, ListAssign, LengthFunc, FunctionCall, Expression
 from traducir import Traducir
 
 class Parser():
@@ -11,7 +10,7 @@ class Parser():
             'MUESTRA', 'SI', 'ENTONCES', 'FIN_SI', 'MIENTRAS', 'HACER', 'FIN_MIENTRAS',
             'CICLO', 'DESDE', 'HASTA', 'EJECUTAR', 'FIN_CICLO',
             'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'LENGTH', 'IDENTIFICADOR',
-            'TRADUCIR', 'DE', 'A', 'EN',]
+            'TRADUCIR', 'DE', 'A', 'EN']
         )
         self.module = module
         self.builder = builder
@@ -35,7 +34,7 @@ class Parser():
         @self.pg.production('INSTRUCCION : MIENTRAS_INSTRUCCION')
         @self.pg.production('INSTRUCCION : CICLO_INSTRUCCION')
         @self.pg.production('INSTRUCCION : LIST_ASSIGN_INSTRUCCION')
-        @self.pg.production('INSTRUCCION : TRADUCIR_INSTRUCCION')  # Incluir la producción
+        @self.pg.production('INSTRUCCION : TRADUCIR_INSTRUCCION')
         def instruccion(p):
             return p[0]
 
@@ -58,7 +57,7 @@ class Parser():
         @self.pg.production('MIENTRAS_INSTRUCCION : MIENTRAS OPEN_PAREN CONDICION CLOSE_PAREN HACER INSTRUCCION_LIST FIN_MIENTRAS')
         def mientras_instruccion(p):
             return While(self.builder, self.module, self.printf, p[2], p[5])
-        
+
         @self.pg.production('TRADUCIR_INSTRUCCION : TRADUCIR DE STRING A STRING EN STRING DOT')
         def traducir_cody(p):
             nombre_archivo = f"""{p[4].getstr().strip('"')}.{p[6].getstr()}"""
@@ -74,18 +73,7 @@ class Parser():
             left = p[0]
             right = p[2]
             operator = p[1]
-            if operator.gettokentype() == 'SUM':
-                return Sum(self.builder, self.module, left, right)
-            elif operator.gettokentype() == 'SUB':
-                return Sub(self.builder, self.module, left, right)
-            elif operator.gettokentype() == 'MOD':
-                return Mod(self.builder, self.module, left, right)
-            elif operator.gettokentype() == 'POW':
-                return Pow(self.builder, self.module, left, right)
-            elif operator.gettokentype() == 'MUL':
-                return Mul(self.builder, self.module, left, right)
-            elif operator.gettokentype() == 'DIV':
-                return Div(self.builder, self.module, left, right)
+            return Expression(self.builder, self.module, left, operator.gettokentype(), right)
 
         @self.pg.production('EXPRESION : TERMINO')
         def expresion_termino(p):

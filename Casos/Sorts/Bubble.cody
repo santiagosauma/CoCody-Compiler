@@ -1,3 +1,10 @@
-lista <- [1, 2, 3, 4, 5].
-longitud_lista <- length(lista).
-muestra(longitud_lista).
+i <- 0.
+muestra(i).
+mientras (i < (5 - 1)) HACER
+    muestra(i).
+    i <- i + 1.
+FIN_MIENTRAS
+
+ciclo j desde 1 hasta (5 - 1) ejecutar
+    muestra(j).
+fin_ciclo
