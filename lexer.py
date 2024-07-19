@@ -50,6 +50,9 @@ class Lexer():
         self.lexer.add('STRING', r'"[^"]*"')
         self.lexer.add('IDENTIFICADOR', r'[a-zA-Z_][a-zA-Z0-9_]*')
 
+        # Comentarios
+        self.lexer.ignore(r'#.*')
+
         # Ignorar espacios en blanco
         self.lexer.ignore(r'\s+')
 
