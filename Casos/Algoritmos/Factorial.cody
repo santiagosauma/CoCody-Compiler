@@ -1,0 +1,8 @@
+n <- 5.
+fact <- 1.
+
+ciclo i desde 2 hasta n ejecutar
+    fact <- fact * i.
+fin_ciclo
+
+muestra(fact).

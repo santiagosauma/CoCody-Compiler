@@ -1,0 +1,20 @@
+lista <- [5, 3, 8, 4, 2].
+n <- length(lista).
+clave <- 4.
+encontrado <- 0.
+
+indice <- n.
+
+ciclo i desde 0 hasta (n - 1) ejecutar
+    si (encontrado == 0) ENTONCES
+        si (lista[i] == clave) ENTONCES
+            encontrado <- 1.
+            indice <- i.
+        FIN_SI
+    FIN_SI
+fin_ciclo
+
+si (encontrado == 1) ENTONCES
+    muestra("Elemento encontrado en indice").
+    muestra(indice).
+FIN_SI
