@@ -1,6 +1,6 @@
 from rply import ParserGenerator
 from my_ast import Number, Sum, Sub, Mul, Div, Mod, Pow, Print, Assign, Identifier, If, While, ForLoop, Condition, String, List, ListAccess, ListAssign, LengthFunc, FunctionCall, Expression
-from traducir import Traducir
+from ai import Traducir
 
 class Parser():
     def __init__(self, module, builder, printf):
