@@ -1,3 +1,4 @@
+# LEXER
 from rply import LexerGenerator
 
 class Lexer():
@@ -24,6 +25,7 @@ class Lexer():
         self.lexer.add('HASTA', r'hasta')
         self.lexer.add('EJECUTAR', r'ejecutar')
         self.lexer.add('FIN_CICLO', r'fin_ciclo')
+        self.lexer.add('COMENTA', r'COMENTA')
 
         # Símbolos y operadores
         self.lexer.add('OPEN_PAREN', r'\(')
