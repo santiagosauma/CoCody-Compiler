@@ -1,0 +1,53 @@
+lista <- [5, 3, 8, 4, 2].
+n <- length(lista).
+
+pila <- [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].
+top <- 0.
+
+pila[top] <- 0.
+top <- top + 1.
+pila[top] <- n - 1.
+top <- top + 1.
+
+mientras (top > 0) HACER
+    top <- top - 1.
+    high <- pila[top].
+    top <- top - 1.
+    low <- pila[top].
+
+    pivote <- lista[high].
+    i <- low - 1.
+
+    ciclo j desde low hasta (high - 1) ejecutar
+        si (lista[j] < pivote) ENTONCES
+            i <- i + 1.
+            temp1 <- lista[i].
+            lista[i] <- lista[j].
+            lista[j] <- temp1.
+        FIN_SI
+    fin_ciclo
+
+    temp2 <- lista[i + 1].
+    lista[i + 1] <- lista[high].
+    lista[high] <- temp2.
+
+    pivote_idx <- i + 1.
+
+    si (pivote_idx > low + 1) ENTONCES
+        pila[top] <- low.
+        top <- top + 1.
+        pila[top] <- pivote_idx - 1.
+        top <- top + 1.
+    FIN_SI
+
+    si (pivote_idx + 1 < high) ENTONCES
+        pila[top] <- pivote_idx + 1.
+        top <- top + 1.
+        pila[top] <- high.
+        top <- top + 1.
+    FIN_SI
+FIN_MIENTRAS
+
+ciclo k desde 0 hasta (n - 1) ejecutar
+    muestra(lista[k]).
+fin_ciclo

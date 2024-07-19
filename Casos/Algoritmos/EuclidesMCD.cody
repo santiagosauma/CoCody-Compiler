@@ -1,0 +1,10 @@
+a <- 48.
+b <- 18.
+
+mientras (b != 0) HACER
+    temp <- b.
+    b <- a % b.
+    a <- temp.
+FIN_MIENTRAS
+
+muestra(a).
