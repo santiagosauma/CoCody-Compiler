@@ -1,0 +1,18 @@
+lista <- [5, 3, 8, 4, 2].
+n <- length(lista).
+
+ciclo i desde 0 hasta (n - 1) ejecutar
+    min_idx <- i.
+    ciclo j desde (i + 1) hasta (n - 1) ejecutar
+        si (lista[j] < lista[min_idx]) ENTONCES
+            min_idx <- j.
+        FIN_SI
+    fin_ciclo
+    temp <- lista[min_idx].
+    lista[min_idx] <- lista[i].
+    lista[i] <- temp.
+fin_ciclo
+
+ciclo k desde 0 hasta (n - 1) ejecutar
+    muestra(lista[k]).
+fin_ciclo

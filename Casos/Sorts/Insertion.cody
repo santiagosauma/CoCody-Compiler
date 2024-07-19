@@ -1,0 +1,25 @@
+lista <- [5, 3, 8, 4, 2].
+n <- length(lista).
+gap <- n / 2.
+
+mientras (gap > 0) HACER
+    ciclo i desde gap hasta (n - 1) ejecutar
+        temp <- lista[i].
+        j <- i.
+        mientras (j >= gap) HACER
+            si (lista[j - gap] > temp) ENTONCES
+                lista[j] <- lista[j - gap].
+                j <- j - gap.
+            FIN_SI
+            si (j < gap) ENTONCES
+                romper.
+            FIN_SI
+        FIN_MIENTRAS
+        lista[j] <- temp.
+    fin_ciclo
+    gap <- gap / 2.
+FIN_MIENTRAS
+
+ciclo k desde 0 hasta (n - 1) ejecutar
+    muestra(lista[k]).
+fin_ciclo

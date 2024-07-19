@@ -9,6 +9,7 @@ class Lexer():
         self.lexer.add('TRADUCIR', r'TRADUCIR')
         self.lexer.add('DE', r'DE')
         self.lexer.add('A', r'A')
+        self.lexer.add('LENGTH', r'length')
         self.lexer.add('MUESTRA', r'muestra')
         self.lexer.add('SI', r'si')
         self.lexer.add('ENTONCES', r'ENTONCES')
@@ -48,7 +49,6 @@ class Lexer():
         self.lexer.add('NUMBER', r'\d+')
         self.lexer.add('STRING', r'"[^"]*"')
         self.lexer.add('IDENTIFICADOR', r'[a-zA-Z_][a-zA-Z0-9_]*')
-        self.lexer.add('LENGTH', r'length')
 
         # Ignorar espacios en blanco
         self.lexer.ignore(r'\s+')
