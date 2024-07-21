@@ -1,15 +1,5 @@
-lista1 <- [1, 2, 3].
-lista2 <- [4, 5, 6].
-resultado <- [0, 0, 0, 0, 0, 0].
-i <- 0.
-mientras (i < 3) HACER
-    resultado[i] <- lista1[i].
-    resultado[i + 3] <- lista2[i].
-    i <- i + 1.
-FIN_MIENTRAS
-muestra(resultado[0]).
-muestra(resultado[1]).
-muestra(resultado[2]).
-muestra(resultado[3]).
-muestra(resultado[4]).
-muestra(resultado[5]).
+a <- 1.
+b <- 2.
+si (a == 1 && b == 2) ENTONCES
+    muestra("Both conditions are true").
+FIN_SI

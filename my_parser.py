@@ -9,7 +9,7 @@ class Parser():
             'OPEN_PAREN', 'CLOSE_PAREN', 'OPEN_BRACKET', 'CLOSE_BRACKET', 'COMMA', 'DOT', 
             'MUESTRA', 'SI', 'ENTONCES', 'FIN_SI', 'MIENTRAS', 'HACER', 'FIN_MIENTRAS',
             'CICLO', 'DESDE', 'HASTA', 'EJECUTAR', 'FIN_CICLO',
-            'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'LENGTH', 'IDENTIFICADOR',
+            'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'AND','LENGTH', 'IDENTIFICADOR',
             'TRADUCIR', 'DE', 'A', 'EN', 'COMENTA']
         )
         self.module = module
@@ -142,11 +142,17 @@ class Parser():
         @self.pg.production('CONDICION : EXPRESION LT EXPRESION')
         @self.pg.production('CONDICION : EXPRESION GTE EXPRESION')
         @self.pg.production('CONDICION : EXPRESION LTE EXPRESION')
+        @self.pg.production('CONDICION : CONDICION AND CONDICION')
         def condicion(p):
-            left = p[0]
-            right = p[2]
-            operator = p[1]
-            return Condition(self.builder, self.module, left, right, operator.gettokentype())
+            if len(p) == 3:
+                left = p[0]
+                right = p[2]
+                return Condition(self.builder, self.module, left, right, p[1].gettokentype())
+            else:
+                left = p[0]
+                right = p[2]
+                operator = p[1]
+                return Condition(self.builder, self.module, left, right, operator.gettokentype())
 
         @self.pg.error
         def error_handle(token):

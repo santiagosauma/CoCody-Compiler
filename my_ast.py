@@ -225,6 +225,8 @@ class Condition:
             return self.builder.icmp_signed('>=', left_val, right_val)
         elif self.operator == 'LTE':
             return self.builder.icmp_signed('<=', left_val, right_val)
+        elif self.operator == 'AND':
+            return self.builder.and_(left_val, right_val)
 
 class String:
     def __init__(self, builder, module, value):

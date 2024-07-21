@@ -45,6 +45,7 @@ class Lexer():
         self.lexer.add('LT', r'<')
         self.lexer.add('GTE', r'>=')
         self.lexer.add('LTE', r'<=')
+        self.lexer.add('AND', r'&&')
         self.lexer.add('DOT', r'\.')
 
         # Tipos de datos
