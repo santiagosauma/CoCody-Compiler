@@ -1,3 +1,4 @@
+# AST
 from llvmlite import ir
 
 class Number:
@@ -82,28 +83,31 @@ class If:
     def eval(self, context):
         cond = self.condition.eval(context)
 
-        # Create blocks for then, else, and end of if
         then_block = self.builder.append_basic_block('then')
-        else_block = self.builder.append_basic_block('else')
-        endif_block = self.builder.append_basic_block('endif')
+        merge_block = self.builder.append_basic_block('ifcont')
 
-        self.builder.cbranch(cond, then_block, else_block)
+        if self.else_body:
+            else_block = self.builder.append_basic_block('else')
+            self.builder.cbranch(cond, then_block, else_block)
+        else:
+            self.builder.cbranch(cond, then_block, merge_block)
 
-        # Generate the 'then' block
+        # Then block
         self.builder.position_at_end(then_block)
         for stmt in self.then_body:
             stmt.eval(context)
-        self.builder.branch(endif_block)
+        if not self.builder.block.is_terminated:
+            self.builder.branch(merge_block)
 
-        # Generate the 'else' block
-        self.builder.position_at_end(else_block)
+        # Else block
         if self.else_body:
+            self.builder.position_at_end(else_block)
             for stmt in self.else_body:
                 stmt.eval(context)
-        self.builder.branch(endif_block)
+            if not self.builder.block.is_terminated:
+                self.builder.branch(merge_block)
 
-        # Position at the end of the 'endif' block
-        self.builder.position_at_end(endif_block)
+        self.builder.position_at_end(merge_block)
 
 class While:
     def __init__(self, builder, module, printf, condition, body):
@@ -304,7 +308,7 @@ class ForLoop:
         self.start_expr = start_expr
         self.end_expr = end_expr
         self.body = body
-        print(f'ForLoop body type: {type(self.body)}')  # Debugging output
+        self.break_block = None
 
     def eval(self, context):
         start_val = self.start_expr.eval(context)
@@ -322,6 +326,7 @@ class ForLoop:
         cond_block = self.builder.append_basic_block('cond')
         loop_block = self.builder.append_basic_block('loop')
         after_loop_block = self.builder.append_basic_block('afterloop')
+        self.break_block = after_loop_block
 
         self.builder.branch(cond_block)
         self.builder.position_at_end(cond_block)
@@ -332,23 +337,20 @@ class ForLoop:
 
         self.builder.position_at_end(loop_block)
 
-        # Create new context for the loop
         new_context = context.copy()
         new_context[self.variable] = loop_var
-
-        # Evaluate the body of the loop
-        if not isinstance(self.body, list):
-            raise TypeError(f"Expected body to be a list, but got {type(self.body)}")  # Additional debug check
+        new_context['loop_context'] = self
 
         for stmt in self.body:
             stmt.eval(new_context)
 
-        incremented_val = self.builder.add(loop_val, ir.Constant(ir.IntType(32), 1))
-        self.builder.store(incremented_val, loop_var)
-        self.builder.branch(cond_block)
+        if not self.builder.block.is_terminated:
+            incremented_val = self.builder.add(loop_val, ir.Constant(ir.IntType(32), 1))
+            self.builder.store(incremented_val, loop_var)
+            self.builder.branch(cond_block)
 
         self.builder.position_at_end(after_loop_block)
-        
+
 class LengthFunc:
     def __init__(self, builder, module, name):
         self.builder = builder
@@ -411,3 +413,15 @@ class Expression:
             pow_func = self.module.declare_intrinsic('llvm.pow', [ir.DoubleType()])
             result = self.builder.call(pow_func, [left_float, right_float])
             return self.builder.fptoui(result, ir.IntType(32))
+
+class Break:
+    def __init__(self, builder):
+        self.builder = builder
+
+    def eval(self, context):
+        loop_context = context.get('loop_context')
+        if loop_context is not None and hasattr(loop_context, 'break_block'):
+            if not self.builder.block.is_terminated:
+                self.builder.branch(loop_context.break_block)
+        else:
+            raise ValueError("Break statement outside of loop")

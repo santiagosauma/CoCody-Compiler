@@ -1,6 +1,7 @@
+# PARSER
 from rply import ParserGenerator
-from my_ast import Number, Sum, Sub, Mul, Div, Mod, Pow, Print, Assign, Identifier, If, While, ForLoop, Condition, String, List, ListAccess, ListAssign, LengthFunc, FunctionCall, Expression
-from ai import Traducir, Comentar
+from ai import Comentar, Traducir
+from my_ast import Number, Sum, Sub, Mul, Div, Mod, Pow, Print, Assign, Identifier, If, While, ForLoop, Condition, String, List, ListAccess, ListAssign, LengthFunc, FunctionCall, Expression, Break
 
 class Parser():
     def __init__(self, module, builder, printf):
@@ -10,7 +11,7 @@ class Parser():
             'MUESTRA', 'SI', 'ENTONCES', 'FIN_SI', 'MIENTRAS', 'HACER', 'FIN_MIENTRAS',
             'CICLO', 'DESDE', 'HASTA', 'EJECUTAR', 'FIN_CICLO',
             'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'AND', 'SINO', 'LENGTH', 'IDENTIFICADOR',
-            'TRADUCIR', 'DE', 'A', 'EN', 'COMENTA']
+            'TRADUCIR', 'DE', 'A', 'EN', 'COMENTA', 'ROMPER']  # Añadir ROMPER aquí
         )
         self.module = module
         self.builder = builder
@@ -36,6 +37,7 @@ class Parser():
         @self.pg.production('INSTRUCCION : LIST_ASSIGN_INSTRUCCION')
         @self.pg.production('INSTRUCCION : TRADUCIR_INSTRUCCION')
         @self.pg.production('INSTRUCCION : COMENTA_INSTRUCCION')
+        @self.pg.production('INSTRUCCION : ROMPER_INSTRUCCION')  # Añadir esta línea
         def instruccion(p):
             return p[0]
 
@@ -74,6 +76,10 @@ class Parser():
         def comentar_cody(p):
             nombre_archivo = f"""{p[1].getstr().strip('"')}_commented.cody"""
             return Comentar(p[1].getstr(), nombre_archivo)
+
+        @self.pg.production('ROMPER_INSTRUCCION : ROMPER DOT')
+        def romper_instruccion(p):
+            return Break(self.builder)
 
         @self.pg.production('EXPRESION : EXPRESION SUM TERMINO')
         @self.pg.production('EXPRESION : EXPRESION SUB TERMINO')

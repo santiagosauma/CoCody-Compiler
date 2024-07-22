@@ -27,6 +27,7 @@ class Lexer():
         self.lexer.add('EJECUTAR', r'ejecutar')
         self.lexer.add('FIN_CICLO', r'fin_ciclo')
         self.lexer.add('COMENTA', r'COMENTA')
+        self.lexer.add('ROMPER', r'romper')
 
         # Símbolos y operadores
         self.lexer.add('OPEN_PAREN', r'\(')

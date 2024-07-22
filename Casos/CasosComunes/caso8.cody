@@ -1,0 +1,6 @@
+ciclo i desde 0 hasta 10 ejecutar
+    si (i == 5) ENTONCES
+        romper.
+    FIN_SI
+    muestra(i).
+fin_ciclo
