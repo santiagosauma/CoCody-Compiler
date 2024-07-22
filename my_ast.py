@@ -71,25 +71,38 @@ class Pow(BinaryOp):
         return self.builder.fptoui(result, ir.IntType(32))
 
 class If:
-    def __init__(self, builder, module, printf, condition, body):
+    def __init__(self, builder, module, printf, condition, then_body, else_body=None):
         self.builder = builder
         self.module = module
         self.printf = printf
         self.condition = condition
-        self.body = body
+        self.then_body = then_body
+        self.else_body = else_body
 
     def eval(self, context):
         cond = self.condition.eval(context)
+
+        # Create blocks for then, else, and end of if
         then_block = self.builder.append_basic_block('then')
+        else_block = self.builder.append_basic_block('else')
         endif_block = self.builder.append_basic_block('endif')
 
-        self.builder.cbranch(cond, then_block, endif_block)
+        self.builder.cbranch(cond, then_block, else_block)
 
+        # Generate the 'then' block
         self.builder.position_at_end(then_block)
-        for stmt in self.body:
+        for stmt in self.then_body:
             stmt.eval(context)
         self.builder.branch(endif_block)
 
+        # Generate the 'else' block
+        self.builder.position_at_end(else_block)
+        if self.else_body:
+            for stmt in self.else_body:
+                stmt.eval(context)
+        self.builder.branch(endif_block)
+
+        # Position at the end of the 'endif' block
         self.builder.position_at_end(endif_block)
 
 class While:
@@ -214,19 +227,24 @@ class Condition:
             right_val = ir.Constant(ir.IntType(32), right_val)
 
         if self.operator == 'EQ':
-            return self.builder.icmp_signed('==', left_val, right_val)
+            result = self.builder.icmp_signed('==', left_val, right_val)
         elif self.operator == 'NEQ':
-            return self.builder.icmp_signed('!=', left_val, right_val)
+            result = self.builder.icmp_signed('!=', left_val, right_val)
         elif self.operator == 'GT':
-            return self.builder.icmp_signed('>', left_val, right_val)
+            result = self.builder.icmp_signed('>', left_val, right_val)
         elif self.operator == 'LT':
-            return self.builder.icmp_signed('<', left_val, right_val)
+            result = self.builder.icmp_signed('<', left_val, right_val)
         elif self.operator == 'GTE':
-            return self.builder.icmp_signed('>=', left_val, right_val)
+            result = self.builder.icmp_signed('>=', left_val, right_val)
         elif self.operator == 'LTE':
-            return self.builder.icmp_signed('<=', left_val, right_val)
+            result = self.builder.icmp_signed('<=', left_val, right_val)
         elif self.operator == 'AND':
-            return self.builder.and_(left_val, right_val)
+            result = self.builder.and_(left_val, right_val)
+        else:
+            raise ValueError(f"Unsupported operator: {self.operator}")
+
+        print(f"Condition evaluated to: {result}")
+        return result
 
 class String:
     def __init__(self, builder, module, value):

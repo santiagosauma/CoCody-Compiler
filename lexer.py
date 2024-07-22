@@ -19,6 +19,7 @@ class Lexer():
         self.lexer.add('MIENTRAS', r'mientras')
         self.lexer.add('HACER', r'HACER')
         self.lexer.add('FIN_MIENTRAS', r'FIN_MIENTRAS')
+        self.lexer.add('SINO', r'SiNo')
         self.lexer.add('ASIGNA', r'<-')
         self.lexer.add('CICLO', r'ciclo')
         self.lexer.add('DESDE', r'desde')

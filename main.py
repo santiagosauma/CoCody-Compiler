@@ -3,6 +3,10 @@ from lexer import Lexer
 from my_parser import Parser
 from codegen import CodeGen
 
+def debug_ir(module):
+    print("Generated LLVM IR:")
+    print(str(module))
+
 def main():
     if len(sys.argv) != 2:
         print("Uso: python main.py <archivo.cody>")
@@ -44,6 +48,7 @@ def main():
 
     # Create IR and save it
     codegen.create_ir()
+    debug_ir(module)  # Debugging: Print the generated LLVM IR
     codegen.save_ir("output.ll")
 
     import os

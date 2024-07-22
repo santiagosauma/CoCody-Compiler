@@ -17,7 +17,7 @@ loop:
   %".9" = load i32, i32* %".8"
   %".10" = srem i32 %".9", 2
   %".11" = icmp eq i32 %".10", 0
-  br i1 %".11", label %"then", label %"endif"
+  br i1 %".11", label %"then", label %"else"
 afterloop:
   ret void
 then:
@@ -25,15 +25,17 @@ then:
   %".14" = bitcast [5 x i8]* @"fstr1" to i8*
   %".15" = call i32 (i8*, ...) @"printf"(i8* %".14", i8* %".13")
   br label %"endif"
+else:
+  br label %"endif"
 endif:
-  %".17" = load i32, i32* @"i"
-  %".18" = getelementptr [5 x i32], [5 x i32]* @"mi_lista", i32 0, i32 %".17"
-  %".19" = load i32, i32* %".18"
-  %".20" = bitcast [5 x i8]* @"fstr2" to i8*
-  %".21" = call i32 (i8*, ...) @"printf"(i8* %".20", i32 %".19")
-  %".22" = load i32, i32* @"i"
-  %".23" = add i32 %".22", 1
-  store i32 %".23", i32* @"i"
+  %".18" = load i32, i32* @"i"
+  %".19" = getelementptr [5 x i32], [5 x i32]* @"mi_lista", i32 0, i32 %".18"
+  %".20" = load i32, i32* %".19"
+  %".21" = bitcast [5 x i8]* @"fstr2" to i8*
+  %".22" = call i32 (i8*, ...) @"printf"(i8* %".21", i32 %".20")
+  %".23" = load i32, i32* @"i"
+  %".24" = add i32 %".23", 1
+  store i32 %".24", i32* @"i"
   br label %"cond_block"
 }
 

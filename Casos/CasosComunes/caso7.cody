@@ -1,0 +1,7 @@
+a <- 3.
+b <- 2.
+si (a == 1 && b == 2) ENTONCES
+    muestra("Both conditions are true").
+SiNo
+    muestra("At least one condition is false").
+FIN_SI

@@ -9,7 +9,7 @@ class Parser():
             'OPEN_PAREN', 'CLOSE_PAREN', 'OPEN_BRACKET', 'CLOSE_BRACKET', 'COMMA', 'DOT', 
             'MUESTRA', 'SI', 'ENTONCES', 'FIN_SI', 'MIENTRAS', 'HACER', 'FIN_MIENTRAS',
             'CICLO', 'DESDE', 'HASTA', 'EJECUTAR', 'FIN_CICLO',
-            'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'AND','LENGTH', 'IDENTIFICADOR',
+            'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'AND', 'SINO', 'LENGTH', 'IDENTIFICADOR',
             'TRADUCIR', 'DE', 'A', 'EN', 'COMENTA']
         )
         self.module = module
@@ -52,8 +52,14 @@ class Parser():
             return Print(self.builder, self.module, self.printf, p[2])
 
         @self.pg.production('SI_INSTRUCCION : SI OPEN_PAREN CONDICION CLOSE_PAREN ENTONCES INSTRUCCION_LIST FIN_SI')
+        @self.pg.production('SI_INSTRUCCION : SI OPEN_PAREN CONDICION CLOSE_PAREN ENTONCES INSTRUCCION_LIST SINO INSTRUCCION_LIST FIN_SI')
         def si_instruccion(p):
-            return If(self.builder, self.module, self.printf, p[2], p[5])
+            condition = p[2]
+            then_body = p[5]
+            if len(p) == 9:
+                else_body = p[7]
+                return If(self.builder, self.module, self.printf, condition, then_body, else_body)
+            return If(self.builder, self.module, self.printf, condition, then_body)
 
         @self.pg.production('MIENTRAS_INSTRUCCION : MIENTRAS OPEN_PAREN CONDICION CLOSE_PAREN HACER INSTRUCCION_LIST FIN_MIENTRAS')
         def mientras_instruccion(p):
