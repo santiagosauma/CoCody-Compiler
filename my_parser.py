@@ -11,7 +11,7 @@ class Parser():
             'MUESTRA', 'SI', 'ENTONCES', 'FIN_SI', 'MIENTRAS', 'HACER', 'FIN_MIENTRAS',
             'CICLO', 'DESDE', 'HASTA', 'EJECUTAR', 'FIN_CICLO',
             'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'AND', 'SINO', 'LENGTH', 'IDENTIFICADOR',
-            'TRADUCIR', 'DE', 'A', 'EN', 'COMENTA', 'ROMPER']  # Añadir ROMPER aquí
+            'TRADUCIR', 'DE', 'A', 'EN', 'COMENTA', 'ROMPER']
         )
         self.module = module
         self.builder = builder
@@ -37,7 +37,7 @@ class Parser():
         @self.pg.production('INSTRUCCION : LIST_ASSIGN_INSTRUCCION')
         @self.pg.production('INSTRUCCION : TRADUCIR_INSTRUCCION')
         @self.pg.production('INSTRUCCION : COMENTA_INSTRUCCION')
-        @self.pg.production('INSTRUCCION : ROMPER_INSTRUCCION')  # Añadir esta línea
+        @self.pg.production('INSTRUCCION : ROMPER_INSTRUCCION')
         def instruccion(p):
             return p[0]
 
@@ -134,8 +134,11 @@ class Parser():
             return LengthFunc(self.builder, self.module, p[2].getstr())
 
         @self.pg.production('LIST : OPEN_BRACKET LIST_ELEMENTS CLOSE_BRACKET')
+        @self.pg.production('LIST : OPEN_BRACKET CLOSE_BRACKET')  # Add this production for empty lists
         def list(p):
-            return List(p[1])
+            if len(p) == 3:
+                return List(p[1])
+            return List([])  # Return an empty list
 
         @self.pg.production('LIST_ELEMENTS : EXPRESION COMMA LIST_ELEMENTS')
         @self.pg.production('LIST_ELEMENTS : EXPRESION')

@@ -140,13 +140,7 @@ class List:
         self.elements = elements
 
     def eval(self, context):
-        evaluated_elements = []
-        for element in self.elements:
-            eval_element = element.eval(context)
-            if isinstance(eval_element, ir.Constant):
-                evaluated_elements.append(int(eval_element.constant))
-            else:
-                evaluated_elements.append(eval_element)
+        evaluated_elements = [element.eval(context) for element in self.elements]
         return evaluated_elements
 
 class ListAccess:
@@ -177,12 +171,15 @@ class ListAssign:
         self.value = value
 
     def eval(self, context):
+        if self.name not in context:
+            raise ValueError(f"List '{self.name}' not defined")
+
         array = context[self.name]
         index = self.index.eval(context)
         value = self.value.eval(context)
 
         if not isinstance(index, ir.Value):
-            index = ir.Constant(ir.IntType(32), int(index.constant))
+            index = ir.Constant(ir.IntType(32), int(index))
 
         element_ptr = self.builder.gep(array, [ir.Constant(ir.IntType(32), 0), index])
         self.builder.store(value, element_ptr)
@@ -197,16 +194,23 @@ class Assign:
     def eval(self, context):
         value = self.value.eval(context)
         if isinstance(value, list):
-            array_type = ir.ArrayType(ir.IntType(32), len(value))
-            global_array = ir.GlobalVariable(self.module, array_type, self.name)
-            global_array.linkage = 'internal'
-            global_array.initializer = ir.Constant(array_type, value)
+            if len(value) == 0:
+                # Create an empty list with initial capacity
+                array_type = ir.ArrayType(ir.IntType(32), 10)  # Initial capacity of 10
+                global_array = ir.GlobalVariable(self.module, array_type, name=self.name)
+                global_array.linkage = 'internal'
+                global_array.initializer = ir.Constant(array_type, [ir.Constant(ir.IntType(32), 0)] * 10)
+            else:
+                array_type = ir.ArrayType(ir.IntType(32), len(value))
+                global_array = ir.GlobalVariable(self.module, array_type, name=self.name)
+                global_array.linkage = 'internal'
+                global_array.initializer = ir.Constant(array_type, value)
             context[self.name] = global_array
         else:
             if not isinstance(value, ir.Value):
                 value = ir.Constant(ir.IntType(32), value)
             if self.name not in context:
-                var = ir.GlobalVariable(self.module, value.type, self.name)
+                var = ir.GlobalVariable(self.module, value.type, name=self.name)
                 var.initializer = ir.Constant(value.type, None)
                 var.linkage = 'internal'
                 var.global_constant = False
@@ -282,9 +286,31 @@ class Print:
         voidptr_ty = ir.IntType(8).as_pointer()
 
         if isinstance(value.type, ir.PointerType) and value.type.pointee == ir.IntType(8):
-            fmt = "%s \n\0"
+            fmt = "%s\n\0"
+        elif isinstance(value.type, ir.PointerType) and isinstance(value.type.pointee, ir.ArrayType):
+            # This is an array (list)
+            array_ptr = value
+            array_type = value.type.pointee
+            
+            # Handle empty list case
+            if array_type.count == 0:
+                self.print_empty_list()
+                return
+
+            # Handle printing each element in the list
+            self.print_list_elements(array_ptr, array_type)
+            return
+        elif isinstance(value.type, ir.ArrayType):
+            # This is a global array
+            if value.type.count == 0:
+                self.print_empty_list()
+                return
+            
+            # Handle printing each element in the global array
+            self.print_global_array_elements(value)
+            return
         elif isinstance(value.type, ir.IntType) or isinstance(value, ir.Constant):
-            fmt = "%i \n\0"
+            fmt = "%i\n\0"
         else:
             raise TypeError(f"Unsupported value type for Print: {value.type}")
 
@@ -298,6 +324,75 @@ class Print:
         global_fmt.initializer = c_fmt
         fmt_arg = self.builder.bitcast(global_fmt, voidptr_ty)
         self.builder.call(self.printf, [fmt_arg, value])
+
+    def print_empty_list(self):
+        global global_string_counter  # Ensure global variable is accessible
+        empty_msg = "Empty list\n\0"
+        c_empty_msg = ir.Constant(ir.ArrayType(ir.IntType(8), len(empty_msg)), bytearray(empty_msg.encode("utf8")))
+        global_empty_msg_name = f"fstr{global_string_counter}"
+        global_string_counter += 1
+
+        global_empty_msg = ir.GlobalVariable(self.module, c_empty_msg.type, name=global_empty_msg_name)
+        global_empty_msg.linkage = 'internal'
+        global_empty_msg.global_constant = True
+        global_empty_msg.initializer = c_empty_msg
+        empty_msg_arg = self.builder.bitcast(global_empty_msg, ir.IntType(8).as_pointer())
+        self.builder.call(self.printf, [empty_msg_arg])
+
+    def print_list_elements(self, array_ptr, array_type):
+        global global_string_counter  # Ensure global variable is accessible
+        fmt = "%i "
+        c_fmt = ir.Constant(ir.ArrayType(ir.IntType(8), len(fmt)), bytearray(fmt.encode("utf8")))
+        global_fmt_name = f"fstr{global_string_counter}"
+        global_string_counter += 1
+
+        global_fmt = ir.GlobalVariable(self.module, c_fmt.type, name=global_fmt_name)
+        global_fmt.linkage = 'internal'
+        global_fmt.global_constant = True
+        global_fmt.initializer = c_fmt
+        fmt_arg = self.builder.bitcast(global_fmt, ir.IntType(8).as_pointer())
+
+        for i in range(array_type.count):
+            element_ptr = self.builder.gep(array_ptr, [ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), i)])
+            element = self.builder.load(element_ptr)
+            self.builder.call(self.printf, [fmt_arg, element])
+        
+        self.print_newline()
+
+    def print_global_array_elements(self, global_array):
+        global global_string_counter
+        fmt = "%i "
+        c_fmt = ir.Constant(ir.ArrayType(ir.IntType(8), len(fmt)), bytearray(fmt.encode("utf8")))
+        global_fmt_name = f"fstr{global_string_counter}"
+        global_string_counter += 1
+
+        global_fmt = ir.GlobalVariable(self.module, c_fmt.type, name=global_fmt_name)
+        global_fmt.linkage = 'internal'
+        global_fmt.global_constant = True
+        global_fmt.initializer = c_fmt
+        fmt_arg = self.builder.bitcast(global_fmt, ir.IntType(8).as_pointer())
+
+        array_type = global_array.type.pointee
+        for i in range(array_type.count):
+            element_ptr = self.builder.gep(global_array, [ir.Constant(ir.IntType(32), 0), ir.Constant(ir.IntType(32), i)])
+            element = self.builder.load(element_ptr)
+            self.builder.call(self.printf, [fmt_arg, element])
+        
+        self.print_newline()
+
+    def print_newline(self):
+        global global_string_counter  # Ensure global variable is accessible
+        newline_fmt = "\n\0"
+        c_newline_fmt = ir.Constant(ir.ArrayType(ir.IntType(8), len(newline_fmt)), bytearray(newline_fmt.encode("utf8")))
+        global_newline_fmt_name = f"fstr{global_string_counter}"
+        global_string_counter += 1
+
+        global_newline_fmt = ir.GlobalVariable(self.module, c_newline_fmt.type, name=global_newline_fmt_name)
+        global_newline_fmt.linkage = 'internal'
+        global_newline_fmt.global_constant = True
+        global_newline_fmt.initializer = c_newline_fmt
+        newline_fmt_arg = self.builder.bitcast(global_newline_fmt, ir.IntType(8).as_pointer())
+        self.builder.call(self.printf, [newline_fmt_arg])
 
 class ForLoop:
     def __init__(self, builder, module, printf, variable, start_expr, end_expr, body):
