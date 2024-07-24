@@ -1,0 +1,18 @@
+lista <- [5, 3, 8, 4, 2].
+n <- length(lista).
+
+ciclo i desde 1 hasta (n - 1) ejecutar
+    clave <- lista[i].
+    j <- i - 1.
+    
+    mientras (j >= 0 && lista[j] > clave) HACER
+        lista[j + 1] <- lista[j].
+        j <- j - 1.
+    FIN_MIENTRAS
+
+    lista[j + 1] <- clave.
+fin_ciclo
+
+ciclo k desde 0 hasta (n - 1) ejecutar
+    muestra(lista[k]).
+fin_ciclo

@@ -1,4 +1,6 @@
 import sys
+
+from rply import LexingError
 from lexer import Lexer
 from my_parser import Parser
 from codegen import CodeGen
@@ -16,13 +18,18 @@ def main():
 
     with open(archivo_input, 'r') as f:
         text_input = f.read()
+    print("Texto del archivo:\n", text_input)
 
     lexer = Lexer().get_lexer()
-    tokens = list(lexer.lex(text_input))
-
-    # Imprimir tokens generados
-    for token in tokens:
-        print(f'Token: {token.gettokentype()}, Valor: {token.getstr()}, Posición: {token.getsourcepos().lineno}:{token.getsourcepos().colno}')
+    tokens = []
+    try:
+        for token in lexer.lex(text_input):
+            tokens.append(token)
+            print(f'Token: {token.gettokentype()}, Valor: {token.getstr()}, Posición: {token.getsourcepos().lineno}:{token.getsourcepos().colno}')
+    except LexingError as e:
+        print(f"Error léxico en posición {e.source_pos.idx}, línea {e.source_pos.lineno}, columna {e.source_pos.colno}")
+        print(f"Texto problemático: {text_input[e.source_pos.idx:e.source_pos.idx+10]}")
+        raise e
 
     codegen = CodeGen()
     module = codegen.module
@@ -39,16 +46,12 @@ def main():
         print(f"Error during parsing: {e}")
         sys.exit(1)
 
-    # Context to store variables
     context = {}
-
-    # Evaluate the parsed program
     for stmt in parsed_program:
         stmt.eval(context)
 
-    # Create IR and save it
     codegen.create_ir()
-    debug_ir(module)  # Debugging: Print the generated LLVM IR
+    debug_ir(module)
     codegen.save_ir("output.ll")
 
     import os
