@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
+import unidecode
 
 load_dotenv()
 
@@ -18,6 +19,14 @@ def comentar_lenguaje_gemini(input_code):
     prompt = f'Add comments (in Spanish, UTF-8) to the following CoCody code:\n\n{input_code}'
     respuesta = model.generate_content(prompt)
     respuesta = omitir_primera_ultima_linea(respuesta.text)
+    return respuesta
+
+def documentar_lenguaje_gemini(input_code):
+    prompt = f'Genera documentación en formato markdown para el siguiente código CoCody en español, sin acentos:\n\n{input_code}'
+    respuesta = model.generate_content(prompt)
+    respuesta = omitir_primera_ultima_linea(respuesta.text)
+    respuesta = unidecode.unidecode(respuesta)
+    respuesta += "\n\nPuedes visualizar este documento en un lector de Markdown en línea como [Dillinger](https://dillinger.io/)."
     return respuesta
 
 def limpiar_formato(archivo):
@@ -63,3 +72,21 @@ class Comentar:
             print(f"Archivo {self.source} comentado en {target_filename}")
         else:
             print(f"Error al comentar {self.source}")
+
+class Documentar:
+    def __init__(self, source, target):
+        self.source = source
+        self.target = target
+
+    def eval(self, context):
+        with open(self.source.strip('"'), 'r') as f:
+            code = f.read()
+        documentation = documentar_lenguaje_gemini(code)
+        if documentation:
+            sanitized_target = limpiar_formato(self.target)
+            target_filename = f"{sanitized_target}"
+            with open(target_filename, 'w') as f:
+                f.write(documentation)
+            print(f"Archivo {self.source} documentado en {target_filename}")
+        else:
+            print(f"Error al documentar {self.source}")
