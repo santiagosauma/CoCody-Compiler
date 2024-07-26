@@ -29,6 +29,7 @@ class Lexer():
         self.lexer.add('COMENTA', r'COMENTA')
         self.lexer.add('ROMPER', r'romper')
         self.lexer.add('DOCUMENTA', r'DOCUMENTA')
+        self.lexer.add('GENERA_EJERCICIO', r'GENERA_EJERCICIO')
 
         # Símbolos y operadores
         self.lexer.add('GTE', r'>=')

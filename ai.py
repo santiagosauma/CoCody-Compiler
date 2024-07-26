@@ -26,7 +26,7 @@ def documentar_lenguaje_gemini(input_code):
     respuesta = model.generate_content(prompt)
     respuesta = omitir_primera_ultima_linea(respuesta.text)
     respuesta = unidecode.unidecode(respuesta)
-    respuesta += "\n\nPuedes visualizar este documento en un lector de Markdown en línea como [Dillinger](https://dillinger.io/)."
+    respuesta += "\n\nPuedes visualizar este documento en un lector de Markdown en linea como [Dillinger](https://dillinger.io/)."
     return respuesta
 
 def limpiar_formato(archivo):
@@ -90,3 +90,24 @@ class Documentar:
             print(f"Archivo {self.source} documentado en {target_filename}")
         else:
             print(f"Error al documentar {self.source}")
+
+class GenerarEjercicio:
+    def __init__(self, nivel, tema):
+        self.nivel = nivel
+        self.tema = tema
+
+    def eval(self, context):
+        prompt = f'In Spanish without accent, generate a {self.nivel} level exercise on {self.tema}. Provide: 1. A brief description of the exercise. 2. The problem statement. 3. An example input and output. 4. Resources to learn the concept.'
+        respuesta = model.generate_content(prompt)
+        respuesta_text = omitir_primera_ultima_linea(respuesta.text)
+        respuesta_text = unidecode.unidecode(respuesta_text)
+        respuesta_text += "\n\nPuedes visualizar este documento en un lector de Markdown en linea como [Dillinger](https://dillinger.io/)."
+        ejercicio = respuesta_text.strip()
+        print(f"Ejercicio generado:\n{ejercicio}")
+        
+        # Guardar el ejercicio en un archivo .txt en formato markdown
+        nombre_archivo = f"ejercicio_{self.nivel}_{self.tema}.txt"
+        with open(nombre_archivo, 'w') as file:
+            file.write(ejercicio)
+        
+        print(f"Ejercicio guardado en {nombre_archivo}")

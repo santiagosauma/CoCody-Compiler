@@ -1,6 +1,6 @@
 # PARSER
 from rply import ParserGenerator
-from ai import Comentar, Traducir, Documentar
+from ai import Comentar, GenerarEjercicio, Traducir, Documentar
 from my_ast import Number, Sum, Sub, Mul, Div, Mod, Pow, Print, Assign, Identifier, If, While, ForLoop, Condition, String, List, ListAccess, ListAssign, LengthFunc, FunctionCall, Expression, Break
 
 class Parser():
@@ -11,7 +11,7 @@ class Parser():
             'MUESTRA', 'SI', 'ENTONCES', 'FIN_SI', 'MIENTRAS', 'HACER', 'FIN_MIENTRAS',
             'CICLO', 'DESDE', 'HASTA', 'EJECUTAR', 'FIN_CICLO',
             'EQ', 'NEQ', 'GT', 'LT', 'GTE', 'LTE', 'AND', 'SINO', 'LENGTH', 'IDENTIFICADOR',
-            'TRADUCIR', 'DE', 'A', 'EN', 'COMENTA', 'ROMPER', 'DOCUMENTA']
+            'TRADUCIR', 'DE', 'A', 'EN', 'COMENTA', 'ROMPER', 'DOCUMENTA', 'GENERA_EJERCICIO']
         )
         self.module = module
         self.builder = builder
@@ -86,6 +86,12 @@ class Parser():
         @self.pg.production('ROMPER_INSTRUCCION : ROMPER DOT')
         def romper_instruccion(p):
             return Break(self.builder)
+        
+        @self.pg.production('INSTRUCCION : GENERA_EJERCICIO STRING STRING DOT')
+        def genera_ejercicio(p):
+            nivel = p[1].getstr().strip('"')
+            tema = p[2].getstr().strip('"')
+            return GenerarEjercicio(nivel, tema)
 
         @self.pg.production('EXPRESION : EXPRESION SUM TERMINO')
         @self.pg.production('EXPRESION : EXPRESION SUB TERMINO')

@@ -1,0 +1,35 @@
+**Descripcion:** Este ejercicio te desafia a manipular matrices de manera eficiente utilizando operaciones matriciales y funciones de programacion.
+
+**Enunciado:**
+
+Dado un array bidimensional (matriz) de enteros, calcula la suma de todos los elementos de la diagonal principal, la suma de todos los elementos de la diagonal secundaria y la suma de todos los elementos de la matriz.
+
+**Ejemplo:**
+
+**Entrada:**
+
+```
+matriz = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9]
+]
+```
+
+**Salida:**
+
+```
+Suma diagonal principal: 15
+Suma diagonal secundaria: 15
+Suma total de la matriz: 45
+```
+
+**Recursos para aprender el concepto:**
+
+* **Operaciones de matrices:** https://es.wikipedia.org/wiki/Operaciones_matriciales
+* **Arrays bidimensionales en Python:** https://www.w3schools.com/python/python_arrays.asp
+* **Funciones de programacion en Python:** https://www.w3schools.com/python/python_functions.asp
+
+**Nota:** Puedes usar cualquier lenguaje de programacion que te resulte familiar. 
+
+Puedes visualizar este documento en un lector de Markdown en linea como [Dillinger](https://dillinger.io/).
