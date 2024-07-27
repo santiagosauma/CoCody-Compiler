@@ -1,6 +1,6 @@
 import os
 import tkinter as tk
-from tkinter import ttk, scrolledtext
+from tkinter import ttk, scrolledtext, simpledialog
 from dotenv import load_dotenv
 import google.generativeai as genai
 import unidecode
@@ -8,6 +8,9 @@ from pygments import lex
 from pygments.lexers import PythonLexer
 from pygments.styles import get_style_by_name
 from pygments.token import Token
+import networkx as nx
+import matplotlib.pyplot as plt
+from collections.abc import Mapping
 
 load_dotenv()
 
@@ -147,6 +150,9 @@ class VisualizadorDebug:
 
         self.restart_button = ttk.Button(self.buttons_frame, text="Volver al Inicio", command=self.restart)
         self.restart_button.pack(fill=tk.X, pady=5)
+
+        self.visualize_button = ttk.Button(self.buttons_frame, text="Visualizar Datos", command=self.visualize_data)
+        self.visualize_button.pack(fill=tk.X, pady=5)
 
         self.breakpoints = set()
         self.load_code()
@@ -336,6 +342,40 @@ class VisualizadorDebug:
         self.call_stack_list.delete(0, tk.END)
         for call in reversed(call_stack):
             self.call_stack_list.insert(tk.END, call)
+
+    def visualize_data(self):
+        var_name = simpledialog.askstring("Variable", "Ingrese el nombre de la variable a visualizar:")
+        if var_name and var_name in self.variables:
+            value = self.variables[var_name]
+            if isinstance(value, (list, tuple)):
+                self.visualize_list(value)
+            elif isinstance(value, dict):
+                self.visualize_dict(value)
+            else:
+                tk.messagebox.showinfo("Visualización", "La variable no es una lista ni un diccionario.")
+
+    def visualize_list(self, lst):
+        fig, ax = plt.subplots()
+        ax.plot(range(len(lst)), lst, marker='o')
+        ax.set_title("Visualización de Lista")
+        ax.set_xlabel("Índice")
+        ax.set_ylabel("Valor")
+        plt.show()
+
+    def visualize_dict(self, dct):
+        fig, ax = plt.subplots()
+        G = nx.DiGraph()
+        for key, value in dct.items():
+            G.add_node(key)
+            if isinstance(value, list):
+                for item in value:
+                    G.add_edge(key, item)
+            else:
+                G.add_edge(key, value)
+        pos = nx.spring_layout(G)
+        nx.draw(G, pos, with_labels=True, ax=ax, node_size=3000, node_color="lightblue", font_size=10, font_weight="bold")
+        plt.title("Visualización de Diccionario")
+        plt.show()
 
     def run(self):
         self.root.mainloop()
