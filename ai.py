@@ -145,6 +145,9 @@ class VisualizadorDebug:
         self.run_button = ttk.Button(self.buttons_frame, text="Ejecutar hasta breakpoint", command=self.run_to_breakpoint)
         self.run_button.pack(fill=tk.X, pady=5)
 
+        self.restart_button = ttk.Button(self.buttons_frame, text="Volver al Inicio", command=self.restart)
+        self.restart_button.pack(fill=tk.X, pady=5)
+
         self.breakpoints = set()
         self.load_code()
 
@@ -167,6 +170,9 @@ class VisualizadorDebug:
             # Simular la ejecución de la línea actual
             current_line = self.code[self.current_line].strip()
 
+            # Guardar el estado anterior de las variables
+            previous_variables = self.variables.copy()
+
             # Actualizar variables basadas en la línea actual
             if '<-' in current_line:
                 var, expr = current_line.split('<-')
@@ -180,6 +186,9 @@ class VisualizadorDebug:
                 var = current_line[8:-2].strip()
                 value = self.evaluate_expression(var)
                 self.output_history.append(f"{var}: {self.format_value(value)}\n")
+
+            # Resaltar variables que han cambiado
+            self.highlight_changes(previous_variables, self.variables)
 
             # Actualizar pila de llamadas y bucles
             if current_line.startswith('mientras'):
@@ -246,12 +255,44 @@ class VisualizadorDebug:
         self.update_call_stack(self.call_stack)
         self.update_output(self.output_history)
 
+    def restart(self):
+        if self.history:
+            initial_state = self.history[0]
+            self.restore_state(initial_state)
+            self.output_text.config(state=tk.NORMAL)
+            self.output_text.delete('1.0', tk.END)
+            self.output_history = []  # Limpiar el historial de salida
+            self.output_text.config(state=tk.DISABLED)
+            self.variables = {}  # Limpiar las variables
+            self.call_stack = []  # Limpiar la pila de llamadas
+            self.loop_stack = []  # Limpiar la pila de bucles
+            self.update_variables(self.variables)
+            self.update_call_stack(self.call_stack)
+
     def update_output(self, output_history):
         self.output_text.config(state=tk.NORMAL)
         self.output_text.delete('1.0', tk.END)
         for line in output_history:
             self.output_text.insert(tk.END, line)
         self.output_text.config(state=tk.DISABLED)
+
+    def highlight_changes(self, previous_variables, current_variables):
+        for item in self.variables_tree.get_children():
+            self.variables_tree.item(item, tags='')
+
+        for var, value in current_variables.items():
+            if var not in previous_variables or previous_variables[var] != value:
+                item_id = self.find_variable_item(var)
+                if item_id:
+                    self.variables_tree.item(item_id, tags=('changed',))
+        self.variables_tree.tag_configure('changed', background='yellow')
+
+    def find_variable_item(self, var):
+        for item in self.variables_tree.get_children():
+            values = self.variables_tree.item(item, 'values')
+            if values and values[0] == var:
+                return item
+        return None
 
     def evaluate_expression(self, expr):
         # Evaluar la expresión en el contexto de las variables actuales
