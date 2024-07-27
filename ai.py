@@ -87,6 +87,8 @@ class VisualizadorDebug:
         self.variables = {}
         self.call_stack = []
         self.loop_stack = []  # Pila de bucles para manejar los bucles correctamente
+        self.history = []  # Historial de estados
+        self.output_history = []  # Historial de salida
 
         self.root = tk.Tk()
         self.root.title("Visualizador de Depuración")
@@ -132,13 +134,16 @@ class VisualizadorDebug:
 
         # Botones
         self.buttons_frame = tk.Frame(self.root)
-        self.buttons_frame.pack(side=tk.LEFT, fill=tk.Y)
+        self.buttons_frame.pack(side=tk.LEFT, fill=tk.Y, padx=10, pady=10)
 
         self.next_button = ttk.Button(self.buttons_frame, text="Siguiente Paso", command=self.next_step)
-        self.next_button.pack(fill=tk.X)
+        self.next_button.pack(fill=tk.X, pady=5)
+
+        self.back_button = ttk.Button(self.buttons_frame, text="Volver Atrás", command=self.back_step)
+        self.back_button.pack(fill=tk.X, pady=5)
 
         self.run_button = ttk.Button(self.buttons_frame, text="Ejecutar hasta breakpoint", command=self.run_to_breakpoint)
-        self.run_button.pack(fill=tk.X)
+        self.run_button.pack(fill=tk.X, pady=5)
 
         self.breakpoints = set()
         self.load_code()
@@ -153,13 +158,15 @@ class VisualizadorDebug:
 
     def next_step(self):
         if self.current_line < len(self.code):
+            self.save_state()  # Guardar el estado actual en el historial
+
             self.code_text.tag_remove("highlight", "1.0", tk.END)
             self.code_text.tag_add("highlight", f"{self.current_line+1}.0", f"{self.current_line+1}.end")
             self.code_text.see(f"{self.current_line+1}.0")
 
             # Simular la ejecución de la línea actual
             current_line = self.code[self.current_line].strip()
-            
+
             # Actualizar variables basadas en la línea actual
             if '<-' in current_line:
                 var, expr = current_line.split('<-')
@@ -168,12 +175,12 @@ class VisualizadorDebug:
                 expr = expr.replace('.', '')  # Transformar la expresión a una sintaxis válida de Python
                 value = self.evaluate_expression(expr)
                 self.variables[var] = value
-                self.output_text.insert(tk.END, f"{var} <- {expr} = {self.format_value(value)}\n")
+                self.output_history.append(f"{var} <- {expr} = {self.format_value(value)}\n")
             elif current_line.startswith("muestra("):
                 var = current_line[8:-2].strip()
                 value = self.evaluate_expression(var)
-                self.output_text.insert(tk.END, f"{var}: {self.format_value(value)}\n")
-            
+                self.output_history.append(f"{var}: {self.format_value(value)}\n")
+
             # Actualizar pila de llamadas y bucles
             if current_line.startswith('mientras'):
                 if self.loop_stack and self.loop_stack[-1]['start_line'] == self.current_line:
@@ -202,11 +209,49 @@ class VisualizadorDebug:
             # Actualizar la visualización
             self.update_variables(self.variables)
             self.update_call_stack(self.call_stack)
+            self.update_output(self.output_history)
 
             self.current_line += 1
 
             # Forzar actualización de la interfaz
             self.root.update_idletasks()
+
+    def back_step(self):
+        if self.history:
+            state = self.history.pop()
+            self.restore_state(state)
+
+    def save_state(self):
+        state = {
+            'current_line': self.current_line,
+            'variables': self.variables.copy(),
+            'call_stack': self.call_stack.copy(),
+            'loop_stack': self.loop_stack.copy(),
+            'output_history': self.output_history.copy(),
+        }
+        self.history.append(state)
+
+    def restore_state(self, state):
+        self.current_line = state['current_line']
+        self.variables = state['variables']
+        self.call_stack = state['call_stack']
+        self.loop_stack = state['loop_stack']
+        self.output_history = state['output_history']
+
+        self.code_text.tag_remove("highlight", "1.0", tk.END)
+        self.code_text.tag_add("highlight", f"{self.current_line+1}.0", f"{self.current_line+1}.end")
+        self.code_text.see(f"{self.current_line+1}.0")
+
+        self.update_variables(self.variables)
+        self.update_call_stack(self.call_stack)
+        self.update_output(self.output_history)
+
+    def update_output(self, output_history):
+        self.output_text.config(state=tk.NORMAL)
+        self.output_text.delete('1.0', tk.END)
+        for line in output_history:
+            self.output_text.insert(tk.END, line)
+        self.output_text.config(state=tk.DISABLED)
 
     def evaluate_expression(self, expr):
         # Evaluar la expresión en el contexto de las variables actuales
