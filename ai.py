@@ -86,6 +86,7 @@ class VisualizadorDebug:
         self.current_line = 0
         self.variables = {}
         self.call_stack = []
+        self.loop_stack = []  # Pila de bucles para manejar los bucles correctamente
 
         self.root = tk.Tk()
         self.root.title("Visualizador de Depuración")
@@ -130,11 +131,14 @@ class VisualizadorDebug:
         self.output_text.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
         # Botones
-        self.next_button = ttk.Button(self.root, text="Siguiente Paso", command=self.next_step)
-        self.next_button.pack(side=tk.LEFT)
+        self.buttons_frame = tk.Frame(self.root)
+        self.buttons_frame.pack(side=tk.LEFT, fill=tk.Y)
 
-        self.run_button = ttk.Button(self.root, text="Ejecutar hasta breakpoint", command=self.run_to_breakpoint)
-        self.run_button.pack(side=tk.RIGHT)
+        self.next_button = ttk.Button(self.buttons_frame, text="Siguiente Paso", command=self.next_step)
+        self.next_button.pack(fill=tk.X)
+
+        self.run_button = ttk.Button(self.buttons_frame, text="Ejecutar hasta breakpoint", command=self.run_to_breakpoint)
+        self.run_button.pack(fill=tk.X)
 
         self.breakpoints = set()
         self.load_code()
@@ -161,8 +165,7 @@ class VisualizadorDebug:
                 var, expr = current_line.split('<-')
                 var = var.strip()
                 expr = expr.strip()
-                # Transformar la expresión a una sintaxis válida de Python
-                expr = expr.replace('.', '')
+                expr = expr.replace('.', '')  # Transformar la expresión a una sintaxis válida de Python
                 value = self.evaluate_expression(expr)
                 self.variables[var] = value
                 self.output_text.insert(tk.END, f"{var} <- {expr} = {self.format_value(value)}\n")
@@ -171,12 +174,30 @@ class VisualizadorDebug:
                 value = self.evaluate_expression(var)
                 self.output_text.insert(tk.END, f"{var}: {self.format_value(value)}\n")
             
-            # Actualizar pila de llamadas
-            if current_line.startswith('mientras') or current_line.startswith('si'):
+            # Actualizar pila de llamadas y bucles
+            if current_line.startswith('mientras'):
+                if self.loop_stack and self.loop_stack[-1]['start_line'] == self.current_line:
+                    self.loop_stack[-1]['condition'] = current_line[9:-6].strip().replace('.', '')
+                else:
+                    self.loop_stack.append({'start_line': self.current_line, 'condition': current_line[9:-6].strip().replace('.', '')})
                 self.call_stack.append(current_line)
-            elif current_line == 'FIN_MIENTRAS' or current_line == 'FIN_SI':
+            elif current_line.startswith('si'):
+                self.call_stack.append(current_line)
+            elif current_line == 'FIN_SI':
                 if self.call_stack:
                     self.call_stack.pop()
+            elif current_line == 'FIN_MIENTRAS':
+                if self.loop_stack:
+                    loop = self.loop_stack[-1]
+                    if self.evaluate_condition(loop['condition']):
+                        self.current_line = loop['start_line']
+                    else:
+                        self.loop_stack.pop()
+                        if self.call_stack:
+                            self.call_stack.pop()
+                else:
+                    if self.call_stack:
+                        self.call_stack.pop()
 
             # Actualizar la visualización
             self.update_variables(self.variables)
@@ -193,6 +214,13 @@ class VisualizadorDebug:
             return eval(expr, {}, self.variables)
         except Exception as e:
             return f"Error: {e}"
+
+    def evaluate_condition(self, condition):
+        # Evaluar la condición en el contexto de las variables actuales
+        try:
+            return eval(condition, {}, self.variables)
+        except Exception as e:
+            return False
 
     def format_value(self, value):
         if isinstance(value, float):
