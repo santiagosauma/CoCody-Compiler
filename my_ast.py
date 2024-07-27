@@ -1,14 +1,20 @@
 # AST
 from llvmlite import ir
 
+from ai import VisualizadorDebug
+
 class Number:
     def __init__(self, builder, module, value):
         self.builder = builder
         self.module = module
         self.value = value
 
-    def eval(self, context):
-        return ir.Constant(ir.IntType(32), int(self.value))
+    def eval(self, context, visualizer=None):
+        result = ir.Constant(ir.IntType(32), int(self.value))
+        if visualizer:
+            visualizer.update_variables({"Constant": self.value})
+            visualizer.next_step()
+        return result
 
 class Identifier:
     def __init__(self, builder, module, name):
@@ -38,9 +44,13 @@ class BinaryOp:
         return left_val, right_val
 
 class Sum(BinaryOp):
-    def eval(self, context):
+    def eval(self, context, visualizer=None):
         left_val, right_val = self.eval_operands(context)
-        return self.builder.add(left_val, right_val)
+        result = self.builder.add(left_val, right_val)
+        if visualizer:
+            visualizer.update_variables({"Sum Result": result})
+            visualizer.next_step()
+        return result
 
 class Sub(BinaryOp):
     def eval(self, context):
@@ -520,3 +530,13 @@ class Break:
                 self.builder.branch(loop_context.break_block)
         else:
             raise ValueError("Break statement outside of loop")
+        
+class Visualiza:
+    def __init__(self, source):
+        self.source = source
+
+    def eval(self, context):
+        with open(self.source.strip('"'), 'r') as f:
+            code = f.read()
+        visualizer = VisualizadorDebug(code)
+        visualizer.run()

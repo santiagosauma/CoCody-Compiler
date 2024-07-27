@@ -30,6 +30,7 @@ class Lexer():
         self.lexer.add('ROMPER', r'romper')
         self.lexer.add('DOCUMENTA', r'DOCUMENTA')
         self.lexer.add('GENERA_EJERCICIO', r'GENERA_EJERCICIO')
+        self.lexer.add('VISUALIZA', r'VISUALIZA')
 
         # Símbolos y operadores
         self.lexer.add('GTE', r'>=')

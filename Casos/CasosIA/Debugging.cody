@@ -1,5 +1,1 @@
-# Este es un ejemplo de código CoCody
-VARIABLE <- 10.
-si (VARIABLE > 5) ENTONCES
-    muestra("Variable es mayor que 5").
-FIN_SI
+VISUALIZA "Casos\CasosListas\casolista5.cody".
