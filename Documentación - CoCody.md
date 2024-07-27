@@ -81,6 +81,49 @@ CONDICION : EXPRESION EQ EXPRESION
           | EXPRESION LTE EXPRESION
 ```
 
+## Requisitos
+
+- Python 3.9 o superior
+- pip (el gestor de paquetes de Python)
+- Anaconda (para la gestión de entornos)
+- LLVM (Low-Level Virtual Machine)
+
+## Instalación
+
+1. Para instalar CoCody, se debe clonar el repositorio y ejecutar el siguiente comando:
+
+```bash
+git clone https://github.com/santiagosauma/CoCody-Compiler.git
+cd CoCody-Compiler
+```
+2. Se debe instalar LLVM dle siguiente repositorio. 
+- Para Windows: clang+llvm-18.1.8-x86_64-pc-windows-msvc.tar.xz
+```bash
+https://github.com/llvm/llvm-project/releases/tag/llvmorg-18.1.8
+```
+3. Agregar la carpeta bin de LLVM al PATH del sistema.
+   - Ejemplo: C:\Program Files\LLVM\bin
+4. Crear un entorno de Anaconda con Python 3.8 y activarlo:
+- Se debe estar en Anaconda Prompt para ejecutar los siguientes comandos.
+```bash
+conda create --name compilador_py python=3.8
+``` 
+- Desde el prompt de Anaconda se debe mover a la carpeta donde se clonó el repositorio Cody.
+```bash
+conda activate compilador_py
+code .
+pip install -r requirements.txt
+```
+5. Para ejecutar el compilador, se debe correr el siguiente comando:
+- Ejemplo de caso IA:
+```bash
+run_cody.bat Casos\CasosIA\Traduccion.cody
+```
+- Ejemplo Algoritmos:
+```bash
+run_cody.bat Casos\Algoritmos\fibonacci.cody
+```
+
 ## Funciones
 
 ### Asignación
