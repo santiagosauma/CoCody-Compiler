@@ -1,6 +1,7 @@
 import os
 import tkinter as tk
 from tkinter import ttk, scrolledtext, simpledialog
+from tkinter import messagebox
 from dotenv import load_dotenv
 import google.generativeai as genai
 import unidecode
@@ -10,6 +11,7 @@ from pygments.styles import get_style_by_name
 from pygments.token import Token
 import networkx as nx
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from collections.abc import Mapping
 
 load_dotenv()
@@ -96,9 +98,21 @@ class VisualizadorDebug:
         self.root = tk.Tk()
         self.root.title("Visualizador de Depuración")
 
+        # Marco principal que contiene el código y la gráfica
+        self.main_frame = tk.Frame(self.root)
+        self.main_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
         # Texto del código
-        self.code_text = scrolledtext.ScrolledText(self.root, height=20, width=50, font=("Helvetica", 12))
-        self.code_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.code_text = scrolledtext.ScrolledText(self.main_frame, height=20, width=50, font=("Helvetica", 12))
+        self.code_text.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+        # Panel de gráficos debajo del código
+        self.graph_frame = ttk.LabelFrame(self.main_frame, text="Visualización de Datos")
+        self.graph_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+        self.figure, self.ax = plt.subplots()
+        self.canvas = FigureCanvasTkAgg(self.figure, master=self.graph_frame)
+        self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
         # Marco de variables
         self.variables_frame = ttk.LabelFrame(self.root, text="Variables")
@@ -226,6 +240,9 @@ class VisualizadorDebug:
             self.update_call_stack(self.call_stack)
             self.update_output(self.output_history)
 
+            # Verificar si la variable es una lista y actualizar la gráfica
+            self.update_graph()
+
             self.current_line += 1
 
             # Forzar actualización de la interfaz
@@ -260,6 +277,9 @@ class VisualizadorDebug:
         self.update_variables(self.variables)
         self.update_call_stack(self.call_stack)
         self.update_output(self.output_history)
+
+        # Actualizar visualización de datos si es una lista
+        self.update_graph()
 
     def restart(self):
         if self.history:
@@ -343,6 +363,11 @@ class VisualizadorDebug:
         for call in reversed(call_stack):
             self.call_stack_list.insert(tk.END, call)
 
+    def update_graph(self):
+        for var, value in self.variables.items():
+            if isinstance(value, list):
+                self.visualize_list(value)
+
     def visualize_data(self):
         var_name = simpledialog.askstring("Variable", "Ingrese el nombre de la variable a visualizar:")
         if var_name and var_name in self.variables:
@@ -352,15 +377,16 @@ class VisualizadorDebug:
             elif isinstance(value, dict):
                 self.visualize_dict(value)
             else:
-                tk.messagebox.showinfo("Visualización", "La variable no es una lista ni un diccionario.")
+                messagebox.showinfo("Visualización", "La variable no es una lista ni un diccionario.")
 
     def visualize_list(self, lst):
-        fig, ax = plt.subplots()
-        ax.plot(range(len(lst)), lst, marker='o')
-        ax.set_title("Visualización de Lista")
-        ax.set_xlabel("Índice")
-        ax.set_ylabel("Valor")
-        plt.show()
+        self.ax.clear()
+        self.ax.bar(range(len(lst)), lst)
+        self.ax.set_title("Visualización de Lista")
+        self.ax.set_xlabel("Índice")
+        self.ax.set_ylabel("Valor")
+        self.ax.set_xticks(range(len(lst)))  # Configurar los ticks para mostrar solo los índices
+        self.canvas.draw()
 
     def visualize_dict(self, dct):
         fig, ax = plt.subplots()
