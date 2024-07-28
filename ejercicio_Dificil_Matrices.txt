@@ -1,43 +1,27 @@
-**Descripcion:** Este ejercicio te pide que implementes una funcion que realice una operacion especifica sobre una matriz. 
+**Descripcion:** Este ejercicio te desafia a escribir una funcion que invierta una matriz cuadrada. La inversion de una matriz es una operacion matematica que encuentra la matriz inversa, la cual, cuando se multiplica por la matriz original, da como resultado la matriz identidad. 
 
-**Problema:**
+**Enunciado del problema:**
 
-Escribe una funcion en Python llamada `rotacion_matriz(matriz, direccion)` que reciba una matriz bidimensional y una cadena que representa la direccion de rotacion ( "izquierda" o "derecha" ) como parametros. La funcion debe rotar la matriz en la direccion especificada y devolver la matriz rotada.
+Escribe una funcion llamada `invertir_matriz` que tome una matriz cuadrada como entrada y devuelva su matriz inversa. Si la matriz no tiene inversa, la funcion debe devolver `None`.
 
-**Ejemplo:**
+**Ejemplo de entrada y salida:**
 
 **Entrada:**
-
 ```python
-matriz = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9]
-]
-direccion = "izquierda"
+matriz = [[1, 2], [3, 4]]
 ```
 
 **Salida:**
-
 ```python
-[
-    [3, 6, 9],
-    [2, 5, 8],
-    [1, 4, 7]
-]
+[[-2.0, 1.0], [1.5, -0.5]]
 ```
 
 **Recursos para aprender:**
 
-* [Documentacion de Python sobre matrices](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions)
-* [Tutorial de rotacion de matrices en Python](https://www.geeksforgeeks.org/rotate-a-matrix-by-90-degree-in-clockwise-direction-without-using-any-extra-space/)
-* [Tutorial sobre matrices en general](https://www.khanacademy.org/math/precalculus/precalc-matrices)
+* [Inversion de matrices en Wikipedia](https://es.wikipedia.org/wiki/Matriz_invertible)
+* [Tutorial de inversion de matrices en Khan Academy](https://es.khanacademy.org/math/linear-algebra/matrix-transformations/inverse-matrices/v/inverse-matrix-example-1)
+* [Documentacion de NumPy para matrices inversas](https://numpy.org/doc/stable/reference/generated/numpy.linalg.inv.html)
 
-**Recuerda:**
-
-* La funcion debe modificar la matriz original en lugar de crear una nueva.
-* El codigo debe ser eficiente y manejar matrices de cualquier tamano.
-* La direccion de rotacion puede ser "izquierda" o "derecha".
-
+**Nota:** Para este ejercicio se recomienda usar la libreria NumPy para trabajar con matrices.
 
 Puedes visualizar este documento en un lector de Markdown en linea como [Dillinger](https://dillinger.io/).

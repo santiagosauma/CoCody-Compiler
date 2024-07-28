@@ -1,0 +1,15 @@
+# Inicializa la variable x en 0
+x <- 0.
+
+# Ciclo que itera desde 0 hasta 10
+ciclo i desde 0 hasta 10 ejecutar
+    # Condición para verificar si i es par
+    si (i % 2 == 0) ENTONCES
+        # Si i es par, suma su valor a x
+        x <- x + i.
+    FIN_SI
+fin_ciclo
+
+# Muestra el valor final de x
+muestra(x).
+```
