@@ -298,25 +298,20 @@ class Print:
         if isinstance(value.type, ir.PointerType) and value.type.pointee == ir.IntType(8):
             fmt = "%s\n\0"
         elif isinstance(value.type, ir.PointerType) and isinstance(value.type.pointee, ir.ArrayType):
-            # This is an array (list)
             array_ptr = value
             array_type = value.type.pointee
             
-            # Handle empty list case
             if array_type.count == 0:
                 self.print_empty_list()
                 return
 
-            # Handle printing each element in the list
             self.print_list_elements(array_ptr, array_type)
             return
         elif isinstance(value.type, ir.ArrayType):
-            # This is a global array
             if value.type.count == 0:
                 self.print_empty_list()
                 return
             
-            # Handle printing each element in the global array
             self.print_global_array_elements(value)
             return
         elif isinstance(value.type, ir.IntType) or isinstance(value, ir.Constant):
@@ -336,7 +331,7 @@ class Print:
         self.builder.call(self.printf, [fmt_arg, value])
 
     def print_empty_list(self):
-        global global_string_counter  # Ensure global variable is accessible
+        global global_string_counter
         empty_msg = "Empty list\n\0"
         c_empty_msg = ir.Constant(ir.ArrayType(ir.IntType(8), len(empty_msg)), bytearray(empty_msg.encode("utf8")))
         global_empty_msg_name = f"fstr{global_string_counter}"
@@ -350,7 +345,7 @@ class Print:
         self.builder.call(self.printf, [empty_msg_arg])
 
     def print_list_elements(self, array_ptr, array_type):
-        global global_string_counter  # Ensure global variable is accessible
+        global global_string_counter
         fmt = "%i "
         c_fmt = ir.Constant(ir.ArrayType(ir.IntType(8), len(fmt)), bytearray(fmt.encode("utf8")))
         global_fmt_name = f"fstr{global_string_counter}"
@@ -391,7 +386,7 @@ class Print:
         self.print_newline()
 
     def print_newline(self):
-        global global_string_counter  # Ensure global variable is accessible
+        global global_string_counter
         newline_fmt = "\n\0"
         c_newline_fmt = ir.Constant(ir.ArrayType(ir.IntType(8), len(newline_fmt)), bytearray(newline_fmt.encode("utf8")))
         global_newline_fmt_name = f"fstr{global_string_counter}"
