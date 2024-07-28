@@ -223,6 +223,26 @@ class VisualizadorDebug:
                     # Saltar al fin de la estructura 'si'
                     self.skip_to_end_of_block("FIN_SI")
 
+            # Manejar estructura de control 'ciclo'
+            elif current_line.startswith("ciclo"):
+                parts = current_line.split()
+                var = parts[1]
+                start = self.evaluate_expression(parts[3])
+                end = self.evaluate_expression(parts[5])
+                if self.loop_stack and self.loop_stack[-1]['start_line'] == self.current_line:
+                    loop = self.loop_stack[-1]
+                    loop['current'] += 1
+                    if loop['current'] > end:
+                        self.skip_to_end_of_block("fin_ciclo")
+                        self.loop_stack.pop()
+                        self.call_stack.pop()
+                    else:
+                        self.variables[loop['var']] = loop['current']
+                else:
+                    self.variables[var] = start
+                    self.loop_stack.append({'start_line': self.current_line, 'end': end, 'current': start, 'var': var})
+                    self.call_stack.append(current_line)
+
             # Resaltar variables que han cambiado
             self.highlight_changes(previous_variables, self.variables)
 
@@ -248,6 +268,17 @@ class VisualizadorDebug:
                 else:
                     if self.call_stack:
                         self.call_stack.pop()
+            elif current_line == 'fin_ciclo':
+                if self.loop_stack:
+                    loop = self.loop_stack[-1]
+                    loop['current'] += 1
+                    if loop['current'] > loop['end']:
+                        self.loop_stack.pop()
+                        if self.call_stack:
+                            self.call_stack.pop()
+                    else:
+                        self.variables[loop['var']] = loop['current']
+                        self.current_line = loop['start_line']
 
             # Actualizar la visualización
             self.update_variables(self.variables)
@@ -267,7 +298,7 @@ class VisualizadorDebug:
         while self.current_line < len(self.code) - 1:
             self.current_line += 1
             current_line = self.code[self.current_line].strip()
-            if current_line.startswith("si"):
+            if current_line.startswith("si") or current_line.startswith("ciclo"):
                 nested_blocks += 1
             elif current_line == end_marker:
                 nested_blocks -= 1
