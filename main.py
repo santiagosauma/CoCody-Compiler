@@ -5,10 +5,6 @@ from lexer import Lexer
 from my_parser import Parser
 from codegen import CodeGen
 
-def debug_ir(module):
-    print("Generated LLVM IR:")
-    print(str(module))
-
 def main():
     if len(sys.argv) != 2:
         print("Uso: python main.py <archivo.cody>")
@@ -18,17 +14,13 @@ def main():
 
     with open(archivo_input, 'r') as f:
         text_input = f.read()
-    print("Texto del archivo:\n", text_input)
 
     lexer = Lexer().get_lexer()
     tokens = []
     try:
         for token in lexer.lex(text_input):
             tokens.append(token)
-            print(f'Token: {token.gettokentype()}, Valor: {token.getstr()}, Posición: {token.getsourcepos().lineno}:{token.getsourcepos().colno}')
     except LexingError as e:
-        print(f"Error léxico en posición {e.source_pos.idx}, línea {e.source_pos.lineno}, columna {e.source_pos.colno}")
-        print(f"Texto problemático: {text_input[e.source_pos.idx:e.source_pos.idx+10]}")
         raise e
 
     codegen = CodeGen()
@@ -43,7 +35,6 @@ def main():
     try:
         parsed_program = parser.parse(iter(tokens))
     except ValueError as e:
-        print(f"Error during parsing: {e}")
         sys.exit(1)
 
     context = {}
@@ -51,7 +42,6 @@ def main():
         stmt.eval(context)
 
     codegen.create_ir()
-    debug_ir(module)
     codegen.save_ir("output.ll")
 
     import os

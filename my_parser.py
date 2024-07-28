@@ -151,11 +151,11 @@ class Parser():
             return LengthFunc(self.builder, self.module, p[2].getstr())
 
         @self.pg.production('LIST : OPEN_BRACKET LIST_ELEMENTS CLOSE_BRACKET')
-        @self.pg.production('LIST : OPEN_BRACKET CLOSE_BRACKET')  # Add this production for empty lists
+        @self.pg.production('LIST : OPEN_BRACKET CLOSE_BRACKET')
         def list(p):
             if len(p) == 3:
                 return List(p[1])
-            return List([])  # Return an empty list
+            return List([]) 
 
         @self.pg.production('LIST_ELEMENTS : EXPRESION COMMA LIST_ELEMENTS')
         @self.pg.production('LIST_ELEMENTS : EXPRESION')
