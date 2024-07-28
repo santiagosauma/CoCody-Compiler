@@ -1,0 +1,43 @@
+**Descripcion:** Este ejercicio te pide que implementes una funcion que realice una operacion especifica sobre una matriz. 
+
+**Problema:**
+
+Escribe una funcion en Python llamada `rotacion_matriz(matriz, direccion)` que reciba una matriz bidimensional y una cadena que representa la direccion de rotacion ( "izquierda" o "derecha" ) como parametros. La funcion debe rotar la matriz en la direccion especificada y devolver la matriz rotada.
+
+**Ejemplo:**
+
+**Entrada:**
+
+```python
+matriz = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+direccion = "izquierda"
+```
+
+**Salida:**
+
+```python
+[
+    [3, 6, 9],
+    [2, 5, 8],
+    [1, 4, 7]
+]
+```
+
+**Recursos para aprender:**
+
+* [Documentacion de Python sobre matrices](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions)
+* [Tutorial de rotacion de matrices en Python](https://www.geeksforgeeks.org/rotate-a-matrix-by-90-degree-in-clockwise-direction-without-using-any-extra-space/)
+* [Tutorial sobre matrices en general](https://www.khanacademy.org/math/precalculus/precalc-matrices)
+
+**Recuerda:**
+
+* La funcion debe modificar la matriz original en lugar de crear una nueva.
+* El codigo debe ser eficiente y manejar matrices de cualquier tamano.
+* La direccion de rotacion puede ser "izquierda" o "derecha".
+
+
+Puedes visualizar este documento en un lector de Markdown en linea como [Dillinger](https://dillinger.io/).
