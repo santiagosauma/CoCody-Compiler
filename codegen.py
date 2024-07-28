@@ -1,6 +1,4 @@
 from llvmlite import ir, binding
-import numpy as np
-from numba import njit
 
 class CodeGen:
     def __init__(self):
