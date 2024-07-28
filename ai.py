@@ -200,8 +200,17 @@ class VisualizadorDebug:
                 expr = expr.strip()
                 expr = expr.replace('.', '')  # Transformar la expresión a una sintaxis válida de Python
                 value = self.evaluate_expression(expr)
-                self.variables[var] = value
-                self.output_history.append(f"{var} <- {expr} = {self.format_value(value)}\n")
+                if '[' in var and ']' in var:
+                    # Es una lista con un índice
+                    list_var, index = var.split('[')
+                    index = index[:-1]  # Remover el ']'
+                    list_var = list_var.strip()
+                    index = self.evaluate_expression(index)
+                    self.variables[list_var][index] = value
+                    self.output_history.append(f"{list_var}[{index}] <- {expr} = {self.format_value(value)}\n")
+                else:
+                    self.variables[var] = value
+                    self.output_history.append(f"{var} <- {expr} = {self.format_value(value)}\n")
             elif current_line.startswith("muestra("):
                 var = current_line[8:-2].strip()
                 value = self.evaluate_expression(var)
@@ -373,7 +382,11 @@ class VisualizadorDebug:
         for i in self.variables_tree.get_children():
             self.variables_tree.delete(i)
         for var, value in variables.items():
-            self.variables_tree.insert('', 'end', values=(var, value))
+            if isinstance(value, list):
+                for index, item in enumerate(value):
+                    self.variables_tree.insert('', 'end', values=(f"{var}[{index}]", item))
+            else:
+                self.variables_tree.insert('', 'end', values=(var, value))
 
     def update_call_stack(self, call_stack):
         self.call_stack_list.delete(0, tk.END)
