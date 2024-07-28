@@ -193,7 +193,7 @@ class VisualizadorDebug:
             # Guardar el estado anterior de las variables
             previous_variables = self.variables.copy()
 
-            # Actualizar variables basadas en la línea actual
+            # Manejar la ejecución del código actual
             if '<-' in current_line:
                 var, expr = current_line.split('<-')
                 var = var.strip()
@@ -207,6 +207,13 @@ class VisualizadorDebug:
                 value = self.evaluate_expression(var)
                 self.output_history.append(f"{var}: {self.format_value(value)}\n")
 
+            # Manejar estructura de control 'si'
+            elif current_line.startswith("si"):
+                condition = current_line[3:-8].strip()
+                if not self.evaluate_condition(condition):
+                    # Saltar al fin de la estructura 'si'
+                    self.skip_to_end_of_block("FIN_SI")
+
             # Resaltar variables que han cambiado
             self.highlight_changes(previous_variables, self.variables)
 
@@ -217,10 +224,8 @@ class VisualizadorDebug:
                 else:
                     self.loop_stack.append({'start_line': self.current_line, 'condition': current_line[9:-6].strip().replace('.', '')})
                 self.call_stack.append(current_line)
-            elif current_line.startswith('si'):
-                self.call_stack.append(current_line)
             elif current_line == 'FIN_SI':
-                if self.call_stack:
+                if self.call_stack and self.call_stack[-1].startswith("si"):
                     self.call_stack.pop()
             elif current_line == 'FIN_MIENTRAS':
                 if self.loop_stack:
@@ -247,6 +252,18 @@ class VisualizadorDebug:
 
             # Forzar actualización de la interfaz
             self.root.update_idletasks()
+
+    def skip_to_end_of_block(self, end_marker):
+        nested_blocks = 1
+        while self.current_line < len(self.code) - 1:
+            self.current_line += 1
+            current_line = self.code[self.current_line].strip()
+            if current_line.startswith("si"):
+                nested_blocks += 1
+            elif current_line == end_marker:
+                nested_blocks -= 1
+                if nested_blocks == 0:
+                    break
 
     def back_step(self):
         if self.history:
