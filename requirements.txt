@@ -33,3 +33,6 @@ tqdm==4.66.4
 typing-extensions==4.12.2
 uritemplate==4.1.1
 urllib3==2.2.2
+matplotlib==3.7.1
+networkx==3.1
+Pygments==2.15.1
