@@ -6,7 +6,7 @@ CoCody es un lenguaje de programación simple diseñado para enseñar los concep
 
 CoCody permite a los usuarios escribir programas con una sintaxis sencilla y clara. Soporta variables, operadores aritméticos, estructuras condicionales y bucles. También permite la impresión de resultados en la consola.
 
-## Sintaxis, Gramática, Léxico
+## Sintaxis, Gramática, Léxico,
 
 ### Léxico
 
