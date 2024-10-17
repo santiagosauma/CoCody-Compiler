@@ -1,5 +1,7 @@
 # CoCody
 
+¡Ganador del 1er Hackathon virtual de Código Facilito!
+
 CoCody es un lenguaje de programación simple diseñado para enseñar los conceptos básicos de la programación. Está construido con Python y utiliza `rply` para el análisis léxico y sintáctico, y `llvmlite` para la generación de código. 
 
 ## Descripción
