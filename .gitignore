@@ -1,0 +1,7 @@
+# Ignorar archivos de entorno
+.env
+
+# Ignorar archivos de salida
+output.exe
+output.ll
+output.obj

@@ -16,7 +16,8 @@ from collections.abc import Mapping
 
 load_dotenv()
 
-genai.configure(api_key=os.getenv('API_KEY'))
+api_key = os.getenv("API_KEY")
+genai.configure(api_key=api_key)
 
 model = genai.GenerativeModel('gemini-1.5-flash')
 

@@ -1,2 +1,2 @@
 # Pruebas de generación
-TRADUCIR DE "Casos\Algoritmos\QuickSort.cody" A "caso_traducido" EN "py" .
+TRADUCIR DE "Casos\Algoritmos\QuickSort.cody" A "Casos\Algoritmos\QuickSort.cody" EN "JavaScript" .
