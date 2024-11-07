@@ -266,19 +266,19 @@ Contributions are welcome! Follow these steps to get started:
     <td align="center">
       <a href="https://github.com/santiagosauma">
         <img src="https://avatars.githubusercontent.com/santiagosauma" width="100px;" alt=""/>
-        <br /><sub style="padding-bottom: 40px;"><b>Luis Santiago Sauma Peñaloza</b></sub>
+        <br /><sub><b>Luis Santiago Sauma Peñaloza</b></sub>
       </a>
       <br />
-      <a href="https://github.com/santiagosauma" title="GitHub"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>
+      <a style="padding-top: 40px;" href="https://github.com/santiagosauma" title="GitHub"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>
       <a href="https://www.linkedin.com/in/santiagosauma/" title="LinkedIn"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
     </td>
     <td align="center">
       <a href="https://github.com/MaryJenn05">
         <img src="https://avatars.githubusercontent.com/MaryJenn05" width="100px;" alt=""/>
-        <br /><sub style="padding-bottom: 40px;"><b>Jennifer Mary Espinoza Quispe</b></sub>
+        <br /><sub><b>Jennifer Mary Espinoza Quispe</b></sub>
       </a>
       <br />
-      <a href="https://github.com/MaryJenn05" title="GitHub"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>
+      <a style="padding-top: 40px;" href="https://github.com/MaryJenn05" title="GitHub"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>
       <a href="https://linkedin.com/in/JenniferLinkedIn" title="LinkedIn"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
     </td>
   </tr>
