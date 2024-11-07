@@ -267,7 +267,7 @@ Contributions are welcome! Follow these steps to get started:
   <tr>
     <td align="center">
       <a href="https://github.com/santiagosauma">
-        <img src="https://avatars.githubusercontent.com/u/USERNAME1?v=4" width="100px;" alt=""/>
+        <img src="https://avatars.githubusercontent.com/santiagosauma" width="100px;" alt=""/>
         <br /><sub><b>Luis Santiago Sauma Peñaloza</b></sub>
       </a>
       <br />
@@ -275,19 +275,18 @@ Contributions are welcome! Follow these steps to get started:
       <a href="https://linkedin.com/in/SaumaLinkedIn" title="LinkedIn"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
     </td>
     <td align="center">
-      <a href="https://github.com/JenniferGitHub">
-        <img src="https://avatars.githubusercontent.com/u/USERNAME2?v=4" width="100px;" alt=""/>
+      <a href="https://github.com/MaryJenn05">
+        <img src="https://avatars.githubusercontent.com/MaryJenn05" width="100px;" alt=""/>
         <br /><sub><b>Jennifer Mary Espinoza Quispe</b></sub>
       </a>
       <br />
-      <a href="https://github.com/JenniferGitHub" title="GitHub"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>
+      <a href="https://github.com/MaryJenn05" title="GitHub"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>
       <a href="https://linkedin.com/in/JenniferLinkedIn" title="LinkedIn"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
     </td>
   </tr>
 </table>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- LICENSE -->

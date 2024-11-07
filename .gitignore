@@ -5,3 +5,6 @@
 output.exe
 output.ll
 output.obj
+
+# Ignorar cache de Python
+__pycache__
