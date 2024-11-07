@@ -53,7 +53,6 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 CoCody is an educational programming language built to make learning programming accessible for beginners. 🧑‍💻 It was developed during the **1st Hackathon by Código Facilito** and is named in honor of Cody, Código Facilito's mascot. The language aims to introduce core programming concepts in an intuitive and beginner-friendly manner.
 
