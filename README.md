@@ -291,6 +291,7 @@ Watch the moment we were announced as the **1st Place Winners** of the **First C
 
 [![Watch the Video](https://img.youtube.com/vi/jEhhmdVdQLs/hqdefault.jpg)](https://www.youtube.com/watch?v=jEhhmdVdQLs)
 
+> 🙌 **Jump to Minute [2:41:15]** Awesome Words from the Judges. *(English)* "If I needed to hire someone, this would be the first team I would reach out to." ❤️
 
 ## License
 
@@ -308,6 +309,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [LLVM.org]: https://img.shields.io/badge/LLVM-0052CC?style=for-the-badge&logo=llvm&logoColor=white
 [LLVM-url]: https://llvm.org/
 [Gemini.dev]: https://img.shields.io/badge/Gemini_AI-1A73E8?style=for-the-badge&logo=google&logoColor=white
-[Gemini-url]: https://example.com/gemini
+[Gemini-url]: gemini.google.com/app
 [Bash.dev]: https://img.shields.io/badge/Bash-000000?style=for-the-badge&logo=gnubash&logoColor=white
 [Bash-url]: https://www.gnu.org/software/bash/
