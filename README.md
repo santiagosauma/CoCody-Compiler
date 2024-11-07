@@ -1,13 +1,11 @@
 <a id="readme-top"></a>
 
-
 <br />
+<h3 align="center">CoCody Compiler</h3>
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
     <img src="images/logo.png" alt="Logo" width="100" height="100">
   </a>
-
-  <h3 align="center">CoCody Compiler</h3>
 
   <p align="center">
     A simple programming language designed to teach the basics of programming in the Hispanic Community.
@@ -195,7 +193,7 @@ Replace `<filename.cody>` with the actual file name of your CoCody program. This
   - [x] **Translation**: Automatically translate CoCody programs into other programming languages.
   - [x] **Documentation**: Auto-generate documentation for CoCody code.
   - [x] **Code Commentary**: Provide AI-driven commentary and explanations for code.
-- [ ] **Presentation Preparation**: Finalize content and visuals for upcoming presentations (in progress as of last commits).
+
 
 </details>
 
@@ -205,10 +203,10 @@ Replace `<filename.cody>` with the actual file name of your CoCody program. This
 - [x] **Complete README Structure**: Develop a well-structured README with clear usage instructions and examples.
 - [x] **Add Tags for Tools and Features**: Tag all tools and features with badges in the README for a professional appearance.
 - [ ] **Multi-language Support for Documentation**:
-    - [ ] English
+    - [x] English
     - [ ] Spanish
 - [ ] **Enhanced Documentation**: Add more example cases and detailed usage instructions.
-- [ ] **Environment Setup Guide**: Provide clear steps to set up the coding environment using Anaconda and a virtual environment, including `.env` configuration.
+- [x] **Environment Setup Guide**: Provide clear steps to set up the coding environment using Anaconda and a virtual environment, including `.env` configuration.
 
 </details>
 
@@ -236,25 +234,57 @@ See the [open issues](https://github.com/github_username/CoCody/issues) for a fu
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-<!-- CONTRIBUTING -->
-## Contributing
+## Contributing 🤝
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are welcome! Follow these steps to get started:
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
+1. **Fork the Project**: [Fork this repository](https://github.com/github_username/CoCody/fork)
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+2. **Create a Branch**:
+   ```sh
+   git checkout -b feature/YourFeatureName
+   ```
 
-### Top contributors:
+3. **Make Changes**: Implement your feature or fix.
 
-<a href="https://github.com/othneildrew/Best-README-Template/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=othneildrew/Best-README-Template" alt="contrib.rocks image" />
-</a>
+4. **Commit Changes**:
+   ```sh
+   git commit -m "Add new feature"
+   ```
+
+5. **Push to Your Branch**:
+   ```sh
+   git push origin feature/YourFeatureName
+   ```
+
+6. **Open a Pull Request**: Submit a PR with a clear description.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Authors ✍️
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/santiagosauma">
+        <img src="https://avatars.githubusercontent.com/u/USERNAME1?v=4" width="100px;" alt=""/>
+        <br /><sub><b>Luis Santiago Sauma Peñaloza</b></sub>
+      </a>
+      <br />
+      <a href="https://github.com/santiagosauma" title="GitHub"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>
+      <a href="https://linkedin.com/in/SaumaLinkedIn" title="LinkedIn"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/JenniferGitHub">
+        <img src="https://avatars.githubusercontent.com/u/USERNAME2?v=4" width="100px;" alt=""/>
+        <br /><sub><b>Jennifer Mary Espinoza Quispe</b></sub>
+      </a>
+      <br />
+      <a href="https://github.com/JenniferGitHub" title="GitHub"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>
+      <a href="https://linkedin.com/in/JenniferLinkedIn" title="LinkedIn"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
+    </td>
+  </tr>
+</table>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
