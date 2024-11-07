@@ -227,7 +227,7 @@ Use this space to list resources you find helpful and would like to give credit 
 [rply-url]: https://rply.readthedocs.io/
 [llvmlite.org]: https://img.shields.io/badge/llvmlite-0052CC?style=for-the-badge&logo=llvm&logoColor=white
 [llvmlite-url]: https://llvmlite.readthedocs.io/
-[Gemini.dev]: https://img.shields.io/badge/Gemini_AI-1A73E8?style=for-the-badge&logo=openai&logoColor=white
+[Gemini.dev]: https://img.shields.io/badge/Gemini_AI-1A73E8?style=for-the-badge&logo=google&logoColor=white
 [Gemini-url]: https://example.com/gemini
 [Bash.dev]: https://img.shields.io/badge/Bash-000000?style=for-the-badge&logo=gnubash&logoColor=white
 [Bash-url]: https://www.gnu.org/software/bash/
