@@ -2,8 +2,8 @@
 
 <h1 align="center">CoCody Compiler</h3>
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="100" height="100">
+  <a href="https://github.com/santiagosauma/CoCody-Compiler">
+    <img src="images/logo.png" alt="Logo" width="120" height="120">
   </a>
 
   <p align="center">
@@ -275,7 +275,7 @@ Contributions are welcome! Follow these steps to get started:
     <td align="center">
       <a href="https://github.com/MaryJenn05">
         <img src="https://avatars.githubusercontent.com/MaryJenn05" width="100px;" alt=""/>
-        <br /><sub><b style="padding-bottom: 10px;" >Jennifer Mary Espinoza Quispe</b></sub>
+        <br /><sub><b style="padding-bottom: 40px;" >Jennifer Mary Espinoza Quispe</b></sub>
       </a>
       <br />
       <a href="https://github.com/MaryJenn05" title="GitHub"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>
