@@ -266,7 +266,7 @@ Contributions are welcome! Follow these steps to get started:
     <td align="center">
       <a href="https://github.com/santiagosauma">
         <img src="https://avatars.githubusercontent.com/santiagosauma" width="100px;" alt=""/>
-        <br /><sub><b style="padding-bottom: 10px;" >Luis Santiago Sauma Peñaloza</b></sub>
+        <br /><sub style="padding-bottom: 40px;"><b>Luis Santiago Sauma Peñaloza</b></sub>
       </a>
       <br />
       <a href="https://github.com/santiagosauma" title="GitHub"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>
@@ -275,7 +275,7 @@ Contributions are welcome! Follow these steps to get started:
     <td align="center">
       <a href="https://github.com/MaryJenn05">
         <img src="https://avatars.githubusercontent.com/MaryJenn05" width="100px;" alt=""/>
-        <br /><sub><b style="padding-bottom: 40px;" >Jennifer Mary Espinoza Quispe</b></sub>
+        <br /><sub style="padding-bottom: 40px;"><b>Jennifer Mary Espinoza Quispe</b></sub>
       </a>
       <br />
       <a href="https://github.com/MaryJenn05" title="GitHub"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>
