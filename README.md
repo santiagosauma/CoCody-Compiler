@@ -4,22 +4,22 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/logo.png" alt="Logo" width="100" height="100">
   </a>
 
-  <h3 align="center">Best-README-Template</h3>
+  <h3 align="center">CoCody Compiler</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    A simple programming language designed to teach the basics of programming in the Hispanic Community.
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/santiagosauma/CoCody-Compiler/blob/main/Documentación%20-%20CoCody.md"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+    <a href="https://drive.google.com/file/d/16wHxqWJuvmv1FTUoZW-Pv9A0kq1BxEzb/view?usp=sharing">View Demo</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/santiagosauma/CoCody-Compiler/issues/new">Report Bug</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/santiagosauma/CoCody-Compiler/issues/new">Request Feature</a>
   </p>
 </div>
 
@@ -58,16 +58,19 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+CoCody is an educational programming language built to make learning programming accessible for beginners. 🧑‍💻 It was developed during the **1st Hackathon by Código Facilito** and is named in honor of Cody, Código Facilito's mascot. The language aims to introduce core programming concepts in an intuitive and beginner-friendly manner.
 
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
+### Key Highlights 🌟
+- **Simple & Intuitive Syntax** ✍️: Designed for beginners, CoCody's syntax makes it easy to learn programming basics.
+- **Comprehensive Feature Support** 📋: Includes support for variables, arithmetic operators, conditional structures (`si...ENTONCES`), and loops (`mientras...HACER`).
+- **Algorithm Efficiency** ⚙️: Efficiently handles classic algorithms such as **BubbleSort**, **QuickSort**, and **Linear Search**.
+- **Cross-Language Translation** 🌐: Integrates with the Gemini AI to translate programs into other programming languages, broadening accessibility.
+- **Code Documentation Generation** 📝: Uses AI to automatically document code, making it easy to understand and share.
+- **Debugging Visualizer** 📊: Includes a debugging visualizer that generates graphical representations of algorithms, helping users understand complex logic visually.
 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
+With CoCody, new programmers can learn fundamentals like working with variables, using arithmetic and logical operators, and implementing control structures, all within a fun and interactive environment.
 
-Use the `BLANK_README.md` to get started.
+For more details, we encourage you to explore the complete documentation. 📚
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
