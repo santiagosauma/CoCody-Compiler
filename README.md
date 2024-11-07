@@ -1,5 +1,11 @@
 <a id="readme-top"></a>
 
+<div align="center">
+  <a href="https://github.com/santiagosauma/CoCody-Compiler">
+    <img src="images/Banner.png" alt="banner">
+  </a>
+</div>
+
 <h1 align="center">CoCody Compiler</h3>
 <div align="center">
   <a href="https://github.com/santiagosauma/CoCody-Compiler">
@@ -68,10 +74,6 @@ With CoCody, new programmers can learn fundamentals like working with variables,
 
 For more details, we encourage you to explore the complete documentation. 📚
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
 ### Built With 🛠️
 
 * [![Anaconda][Anaconda.com]][Anaconda-url]
@@ -80,9 +82,6 @@ For more details, we encourage you to explore the complete documentation. 📚
 * [![llvmlite][llvmlite.org]][llvmlite-url]
 * [![Gemini AI][Gemini.dev]][Gemini-url]
 * [![Bash][Bash.dev]][Bash-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 ## Getting Started 🚀
 
@@ -98,49 +97,61 @@ To set up CoCody on your local machine, follow these steps. We recommend using A
 1. **Clone the Repository**:
    ```sh
    git clone https://github.com/santiagosauma/CoCody-Compiler
+   cd CoCody-Compiler
    ```
 
-2. **Create a Virtual Environment**:
+2. **Install LLVM**:
+   - Download LLVM from the following repository.
+   - For Windows, download `clang+llvm-18.1.8-x86_64-pc-windows-msvc.tar.xz` from:
+   
+   ```sh
+   https://github.com/llvm/llvm-project/releases/tag/llvmorg-18.1.8
+   ```
+
+3. **Add LLVM to System PATH**:
+   - After extracting LLVM, add its `bin` folder to the system PATH.
+   - Example path: `C:\Program Files\LLVM\bin`
+
+4. **Create a Virtual Environment**:
    Open a terminal or Anaconda Prompt, navigate to the CoCody project folder, and create a virtual environment (e.g., `cocody_env`):
+   
    ```sh
    conda create -n cocody_env python=3.8
    ```
 
-3. **Activate the Virtual Environment**:
+5. **Activate the Virtual Environment**:
    After creating the environment, activate it:
+   
    ```sh
    conda activate cocody_env
    ```
 
-4. **Install Required Packages**:
+6. **Install Required Packages**:
    With the virtual environment activated, install the dependencies from `requirements.txt`:
+   
    ```sh
    pip install -r requirements.txt
    ```
 
-5. **Set Up Environment Variables** (Needed for certain functions):
+7. **Set Up Environment Variables** (Needed for certain functions):
    CoCody might require certain API keys or settings in a `.env` file. Follow these steps to get your Gemini API Key and add it to the `.env` file:
 
-   - Go to the [Gemini AI website](ai.google.dev/gemini-api/docs/api-key) and sign in to your account.
+   - Go to the [Gemini AI website](https://ai.google.dev/gemini-api/docs/api-key) and sign in to your account.
    - Navigate to the **API** section in your account settings.
    - Generate a new API Key and copy it.
    - In the root of your CoCody project, create a file named `.env`.
    - Open the `.env` file and add the following line, replacing `YOUR_GEMINI_API_KEY` with your actual API key:
+     
      ```sh
      API_KEY=YOUR_GEMINI_API_KEY
      ```
-   
+
    After adding this line, CoCody will be able to access Gemini's API for functionalities like code documentation, translation, and visualization.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-6. **Run CoCody**:
+8. **Run CoCody**:
    Once everything is set up, you’re ready to start using CoCody!
 
 For more guidance on writing a compiler with Python, you can explore resources like [this Medium article](https://medium.com/@marcelogdeandrade/writing-your-own-programming-language-and-compiler-with-python-a468970ae6df) which was instrumental in the creation of CoCody.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Usage
 
@@ -167,8 +178,6 @@ Once you have set up the environment and written your CoCody code in a file (e.g
 ```
 
 Replace `<filename.cody>` with the actual file name of your CoCody program. This command will interpret and run the program in the CoCody environment.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Roadmap
 
@@ -228,10 +237,6 @@ Replace `<filename.cody>` with the actual file name of your CoCody program. This
 See the [open issues](https://github.com/github_username/CoCody/issues) for a full list of proposed features (and known issues).
 
 
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 ## Contributing 🤝
 
 Contributions are welcome! Follow these steps to get started:
@@ -256,8 +261,6 @@ Contributions are welcome! Follow these steps to get started:
    ```
 
 6. **Open a Pull Request**: Submit a PR with a clear description.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Authors ✍️
 
@@ -284,15 +287,20 @@ Contributions are welcome! Follow these steps to get started:
   </tr>
 </table>
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+## 🏆 Announcement Video
+
+Watch the moment we were announced as the **1st Place Winners** of the **First Código Facilito Hackathon** among 130+ participants from all ages! 🎉
+
+[![Watch the Video](https://i.ytimg.com/vi/jEhhmdVdQLs/maxresdefault.jpg)](https://www.youtube.com/watch?v=jEhhmdVdQLs) 
+
+> 📌 **Jump to Minute [XX:YY]** to see the announcement!
 
 
-<!-- LICENSE -->
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+[🔼 Back to top](#readme-top)
 
 
 [Anaconda.com]: https://img.shields.io/badge/Anaconda-44A833?style=for-the-badge&logo=anaconda&logoColor=white
