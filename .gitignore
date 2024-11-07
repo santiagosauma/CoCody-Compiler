@@ -7,4 +7,4 @@ output.ll
 output.obj
 
 # Ignorar cache de Python
-__pycache__
+__pycache__/
