@@ -78,10 +78,12 @@ For more details, we encourage you to explore the complete documentation. 📚
 
 ### Built With 🛠️
 
+* [![Anaconda][Anaconda.com]][Anaconda-url]
 * [![Python][Python.org]][Python-url]
 * [![rply][rply.dev]][rply-url]
 * [![llvmlite][llvmlite.org]][llvmlite-url]
 * [![Gemini AI][Gemini.dev]][Gemini-url]
+* [![Bash][Bash.dev]][Bash-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -217,9 +219,8 @@ Use this space to list resources you find helpful and would like to give credit 
 
 
 
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[product-screenshot]: images/screenshot.png
+[Anaconda.com]: https://img.shields.io/badge/Anaconda-44A833?style=for-the-badge&logo=anaconda&logoColor=white
+[Anaconda-url]: https://www.anaconda.com/
 [Python.org]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
 [Python-url]: https://www.python.org/
 [rply.dev]: https://img.shields.io/badge/rply-FF4081?style=for-the-badge&logo=python&logoColor=white
@@ -227,4 +228,6 @@ Use this space to list resources you find helpful and would like to give credit 
 [llvmlite.org]: https://img.shields.io/badge/llvmlite-0052CC?style=for-the-badge&logo=llvm&logoColor=white
 [llvmlite-url]: https://llvmlite.readthedocs.io/
 [Gemini.dev]: https://img.shields.io/badge/Gemini_AI-1A73E8?style=for-the-badge&logo=openai&logoColor=white
-[Gemini-url]: gemini.google.com
+[Gemini-url]: https://example.com/gemini
+[Bash.dev]: https://img.shields.io/badge/Bash-000000?style=for-the-badge&logo=gnubash&logoColor=white
+[Bash-url]: https://www.gnu.org/software/bash/
