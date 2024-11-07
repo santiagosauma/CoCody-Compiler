@@ -88,73 +88,152 @@ For more details, we encourage you to explore the complete documentation. 📚
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-<!-- GETTING STARTED -->
-## Getting Started
+## Getting Started 🚀
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+To set up CoCody on your local machine, follow these steps. We recommend using Anaconda to manage dependencies and virtual environments for an isolated setup.
 
-### Prerequisites
+### Prerequisites 📋
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+1. **Install [Anaconda](https://www.anaconda.com/products/distribution)**: Download and install Anaconda for your operating system.
+2. **Python 3.8 or higher**: Anaconda includes Python, so make sure you install a version that includes Python 3.8 or above.
 
-### Installation
+### Installation 🔧
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. **Clone the Repository**:
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/santiagosauma/CoCody-Compiler
    ```
-3. Install NPM packages
+
+2. **Create a Virtual Environment**:
+   Open a terminal or Anaconda Prompt, navigate to the CoCody project folder, and create a virtual environment (e.g., `cocody_env`):
    ```sh
-   npm install
+   conda create -n cocody_env python=3.8
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-5. Change git remote url to avoid accidental pushes to base project
+
+3. **Activate the Virtual Environment**:
+   After creating the environment, activate it:
    ```sh
-   git remote set-url origin github_username/repo_name
-   git remote -v # confirm the changes
+   conda activate cocody_env
    ```
+
+4. **Install Required Packages**:
+   With the virtual environment activated, install the dependencies from `requirements.txt`:
+   ```sh
+   pip install -r requirements.txt
+   ```
+
+5. **Set Up Environment Variables** (Needed for certain functions):
+   CoCody might require certain API keys or settings in a `.env` file. Follow these steps to get your Gemini API Key and add it to the `.env` file:
+
+   - Go to the [Gemini AI website](ai.google.dev/gemini-api/docs/api-key) and sign in to your account.
+   - Navigate to the **API** section in your account settings.
+   - Generate a new API Key and copy it.
+   - In the root of your CoCody project, create a file named `.env`.
+   - Open the `.env` file and add the following line, replacing `YOUR_GEMINI_API_KEY` with your actual API key:
+     ```sh
+     API_KEY=YOUR_GEMINI_API_KEY
+     ```
+   
+   After adding this line, CoCody will be able to access Gemini's API for functionalities like code documentation, translation, and visualization.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+6. **Run CoCody**:
+   Once everything is set up, you’re ready to start using CoCody!
 
-<!-- USAGE EXAMPLES -->
+For more guidance on writing a compiler with Python, you can explore resources like [this Medium article](https://medium.com/@marcelogdeandrade/writing-your-own-programming-language-and-compiler-with-python-a468970ae6df) which was instrumental in the creation of CoCody.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+With CoCody, you can write programs using basic syntax to perform arithmetic operations, define variables, and use control structures like conditionals and loops. For example, a simple CoCody program might look like this:
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+```cocody
+x <- 10
+muestra(x)
+si (x > 5) ENTONCES
+    muestra("x is greater than 5")
+FIN_SI
+```
+
+To get a better understanding of how to write CoCody code, you can refer to:
+- [Example Cases](https://github.com/santiagosauma/CoCody-Compiler/tree/main/Casos): Explore examples of CoCody programs.
+- [Documentation](https://github.com/santiagosauma/CoCody-Compiler/blob/main/Documentación%20-%20CoCody.md): Learn more about CoCody’s syntax, supported operations, and features.
+
+### Running a CoCody Program
+
+Once you have set up the environment and written your CoCody code in a file (e.g., `my_program.cody`), you can execute it by running the following command in your terminal:
+
+```sh
+.\run_cody.bat <filename.cody>
+```
+
+Replace `<filename.cody>` with the actual file name of your CoCody program. This command will interpret and run the program in the CoCody environment.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-<!-- ROADMAP -->
 ## Roadmap
 
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
+<details>
+  <summary>Core Functionalities</summary>
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+- [x] **Arithmetic and Variable Handling**: Implement support for basic arithmetic operations (addition, subtraction, multiplication, division) and variable assignments.
+- [x] **Conditional Statements**: Add support for conditional statements like `IF` and logical operations.
+- [x] **Loops**: Implement loops such as `FOR` and `WHILE` to allow repetitive tasks within the CoCody language.
+- [x] **Functionality for Lists**: Introduce support for lists, list indexing, and list manipulation.
+- [x] **Error Handling**: Add error handling to manage lexical and syntax errors.
+
+</details>
+
+<details>
+  <summary>Features for Enhanced Learning</summary>
+
+- [x] **Code Visualization Tools**: Integrate debugging and graphical tools to help visualize code execution, supporting functions like `Visualiza`.
+- [x] **Gemini Integration for AI Features**: Connect with the Gemini AI for enhanced functionality, including:
+  - [x] **Translation**: Automatically translate CoCody programs into other programming languages.
+  - [x] **Documentation**: Auto-generate documentation for CoCody code.
+  - [x] **Code Commentary**: Provide AI-driven commentary and explanations for code.
+- [ ] **Presentation Preparation**: Finalize content and visuals for upcoming presentations (in progress as of last commits).
+
+</details>
+
+<details>
+  <summary>Project Documentation and User Experience</summary>
+
+- [x] **Complete README Structure**: Develop a well-structured README with clear usage instructions and examples.
+- [x] **Add Tags for Tools and Features**: Tag all tools and features with badges in the README for a professional appearance.
+- [ ] **Multi-language Support for Documentation**:
+    - [ ] English
+    - [ ] Spanish
+- [ ] **Enhanced Documentation**: Add more example cases and detailed usage instructions.
+- [ ] **Environment Setup Guide**: Provide clear steps to set up the coding environment using Anaconda and a virtual environment, including `.env` configuration.
+
+</details>
+
+<details>
+  <summary>Visual and Design Enhancements</summary>
+
+- [x] **Logo and Branding**: Update and fix the logo, improving the visual identity of CoCody.
+- [ ] **Final Visual Enhancements**: Apply any remaining visual or branding tweaks for a cohesive presentation.
+
+</details>
+
+<details>
+  <summary>Future Improvements</summary>
+
+- [ ] **Support for Advanced Data Structures**: Explore adding support for arrays, dictionaries, and custom data types.
+- [ ] **Enhanced Debugging Capabilities**: Improve the debugging experience with more advanced visualization tools.
+- [ ] **Modular Function Support**: Enable the creation and management of modular functions within CoCody.
+
+</details>
+
+See the [open issues](https://github.com/github_username/CoCody/issues) for a full list of proposed features (and known issues).
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- CONTRIBUTING -->
@@ -204,9 +283,7 @@ Project Link: [https://github.com/your_username/repo_name](https://github.com/yo
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
-* [Choose an Open Source License](https://choosealicense.com)
+* [Writing your own programming language and compiler with Python](https://medium.com/@marcelogdeandrade/writing-your-own-programming-language-and-compiler-with-python-a468970ae6df)
 * [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
 * [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
 * [Malven's Grid Cheatsheet](https://grid.malven.co/)
