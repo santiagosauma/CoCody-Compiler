@@ -1,9 +1,7 @@
-<a id="readme-top"></a>
-
 <a href="https://github.com/santiagosauma/CoCody-Compiler">
   <img src="images/Banner.png" alt="banner" width="100%">
 </a>
-
+<a id="readme-top"></a>
 <h1 align="center">CoCody Compiler</h3>
 <div align="center">
   <a href="https://github.com/santiagosauma/CoCody-Compiler">
@@ -77,7 +75,7 @@ For more details, we encourage you to explore the complete documentation. 📚
 * [![Anaconda][Anaconda.com]][Anaconda-url]
 * [![Python][Python.org]][Python-url]
 * [![rply][rply.dev]][rply-url]
-* [![llvmlite][llvmlite.org]][llvmlite-url]
+* [![LLVM][LLVM.org]][LLVM-url]
 * [![Gemini AI][Gemini.dev]][Gemini-url]
 * [![Bash][Bash.dev]][Bash-url]
 
@@ -307,8 +305,8 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [Python-url]: https://www.python.org/
 [rply.dev]: https://img.shields.io/badge/rply-FF4081?style=for-the-badge&logo=python&logoColor=white
 [rply-url]: https://rply.readthedocs.io/
-[llvmlite.org]: https://img.shields.io/badge/llvmlite-0052CC?style=for-the-badge&logo=llvm&logoColor=white
-[llvmlite-url]: https://llvmlite.readthedocs.io/
+[LLVM.org]: https://img.shields.io/badge/LLVM-0052CC?style=for-the-badge&logo=llvm&logoColor=white
+[LLVM-url]: https://llvm.org/
 [Gemini.dev]: https://img.shields.io/badge/Gemini_AI-1A73E8?style=for-the-badge&logo=google&logoColor=white
 [Gemini-url]: https://example.com/gemini
 [Bash.dev]: https://img.shields.io/badge/Bash-000000?style=for-the-badge&logo=gnubash&logoColor=white
