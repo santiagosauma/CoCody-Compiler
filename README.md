@@ -291,13 +291,7 @@ Watch the moment we were announced as the **1st Place Winners** of the **First C
 
 > 📌 **Jump to Minute [2:35:02]** to see the announcement!
 
-<div align="center">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/jEhhmdVdQLs" 
-          title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-  </iframe>
-</div>
-
+[![Watch the Video](https://img.youtube.com/vi/jEhhmdVdQLs/hqdefault.jpg)](https://www.youtube.com/watch?v=jEhhmdVdQLs)
 
 ## License
 
