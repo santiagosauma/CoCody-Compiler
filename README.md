@@ -81,6 +81,7 @@ For more details, we encourage you to explore the complete documentation. 📚
 * [![Python][Python.org]][Python-url]
 * [![rply][rply.dev]][rply-url]
 * [![llvmlite][llvmlite.org]][llvmlite-url]
+* [![Gemini AI][Gemini.dev]][Gemini-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -225,3 +226,5 @@ Use this space to list resources you find helpful and would like to give credit 
 [rply-url]: https://rply.readthedocs.io/
 [llvmlite.org]: https://img.shields.io/badge/llvmlite-0052CC?style=for-the-badge&logo=llvm&logoColor=white
 [llvmlite-url]: https://llvmlite.readthedocs.io/
+[Gemini.dev]: https://img.shields.io/badge/Gemini_AI-1A73E8?style=for-the-badge&logo=openai&logoColor=white
+[Gemini-url]: gemini.google.com
