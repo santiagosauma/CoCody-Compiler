@@ -1,10 +1,8 @@
 <a id="readme-top"></a>
 
-<div align="center">
-  <a href="https://github.com/santiagosauma/CoCody-Compiler">
-    <img src="images/Banner.png" alt="banner">
-  </a>
-</div>
+<a href="https://github.com/santiagosauma/CoCody-Compiler">
+  <img src="images/Banner.png" alt="banner" width="100%">
+</a>
 
 <h1 align="center">CoCody Compiler</h3>
 <div align="center">
@@ -291,7 +289,12 @@ Contributions are welcome! Follow these steps to get started:
 
 Watch the moment we were announced as the **1st Place Winners** of the **First Código Facilito Hackathon** among 130+ participants from all ages! 🎉
 
-[![Watch the Video](https://i.ytimg.com/vi/jEhhmdVdQLs/maxresdefault.jpg)](https://www.youtube.com/watch?v=jEhhmdVdQLs) 
+<div align="center">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/jEhhmdVdQLs" 
+          title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+  </iframe>
+</div>
 
 > 📌 **Jump to Minute [XX:YY]** to see the announcement!
 
