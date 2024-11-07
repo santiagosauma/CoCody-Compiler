@@ -1,6 +1,5 @@
 <a id="readme-top"></a>
 
-<br />
 <h3 align="center">CoCody Compiler</h3>
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
