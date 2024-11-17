@@ -34,7 +34,7 @@ class CodeGen:
     def _compile_ir(self):
         self.builder.ret_void()
         llvm_ir = str(self.module)
-        print(llvm_ir)  # Print the generated LLVM IR for debugging
+        print(llvm_ir)
         mod = self.binding.parse_assembly(llvm_ir)
         mod.verify()
         self.engine.add_module(mod)

@@ -205,8 +205,7 @@ class Assign:
         value = self.value.eval(context)
         if isinstance(value, list):
             if len(value) == 0:
-                # Create an empty list with initial capacity
-                array_type = ir.ArrayType(ir.IntType(32), 10)  # Initial capacity of 10
+                array_type = ir.ArrayType(ir.IntType(32), 10)
                 global_array = ir.GlobalVariable(self.module, array_type, name=self.name)
                 global_array.linkage = 'internal'
                 global_array.initializer = ir.Constant(array_type, [ir.Constant(ir.IntType(32), 0)] * 10)
